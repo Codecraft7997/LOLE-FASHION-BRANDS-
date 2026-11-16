@@ -156,6 +156,7 @@ header{
     border-bottom:1px solid var(--border);
     position:relative;
     z-index:5;
+    gap:12px;
 }
 
 .brand{
@@ -181,9 +182,50 @@ header{
     direction:ltr;
 }
 
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
 .header-note{
     color:#aaa;
     font-size:11px;
+}
+
+/* CART BUTTON */
+
+.cart-link{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    text-decoration:none;
+    background:linear-gradient(120deg,#a77c35,#f1d69b);
+    color:#111;
+    padding:10px 15px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:900;
+    white-space:nowrap;
+    transition:.3s;
+}
+
+.cart-link:hover{
+    filter:brightness(1.12);
+    transform:translateY(-2px);
+}
+
+.cart-count{
+    background:#111;
+    color:#e5c47d;
+    min-width:21px;
+    height:21px;
+    border-radius:50%;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    padding:0 4px;
 }
 
 /* HERO */
@@ -445,7 +487,16 @@ footer p{
     }
 
     .header-note{
-        font-size:9px;
+        display:none;
+    }
+
+    .header-actions{
+        gap:0;
+    }
+
+    .cart-link{
+        padding:9px 11px;
+        font-size:12px;
     }
 
     .hero{
@@ -554,8 +605,17 @@ footer p{
 
     </div>
 
-    <div class="header-note">
-        FASHION BRANDS
+    <div class="header-actions">
+
+        <div class="header-note">
+            FASHION BRANDS
+        </div>
+
+        <a href="cart.html" class="cart-link">
+            🛒 السلة
+            <span class="cart-count" id="cartCount">0</span>
+        </a>
+
     </div>
 
 </header>
@@ -672,9 +732,37 @@ footer p{
 </footer>
 
 <script>
+
+const CART_KEY="lole_cart";
+
+function getCart(){
+    try{
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    }catch(e){
+        return [];
+    }
+}
+
+function updateCartCount(){
+
+    const cart=getCart();
+
+    // كل منتج يُحسب قطعة واحدة
+    const count=cart.length;
+
+    document.getElementById("cartCount").textContent=count;
+}
+
 function enterStore(){
     document.getElementById("welcome").classList.add("hide");
 }
+
+// تحديث العدد عند فتح الصفحة
+updateCartCount();
+
+// تحديث العدد لو رجع العميل للصفحة بعد تعديل السلة
+window.addEventListener("pageshow",updateCartCount);
+
 </script>
 
 </body>
