@@ -33,14 +33,41 @@ header h1{
 
 header p{color:#ddd;margin:10px 0 0}
 
-.back{
+.header-actions{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ flex-wrap:wrap;
+}
+
+.back,.cart-link{
  display:inline-block;
- margin:18px;
- padding:10px 20px;
+ margin:18px 8px;
+ padding:10px 18px;
  color:#e8d18c;
  border:1px solid #b89545;
  border-radius:8px;
  text-decoration:none;
+}
+
+.cart-link{
+ background:#c6a451;
+ color:#111;
+ font-weight:bold;
+}
+
+.cart-count{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ background:#111;
+ color:#e8d18c;
+ border-radius:50%;
+ min-width:23px;
+ height:23px;
+ margin-right:5px;
+ font-size:12px;
 }
 
 .container{
@@ -132,7 +159,14 @@ footer{
  <p>STOCK COLLECTION</p>
 </header>
 
-<a class="back" href="index.html">← الصفحة الرئيسية</a>
+<div class="header-actions">
+ <a class="back" href="index.html">← الصفحة الرئيسية</a>
+
+ <a class="cart-link" href="cart.html">
+  🛒 السلة
+  <span class="cart-count" id="cartCount">0</span>
+ </a>
+</div>
 
 <div class="container">
  <h2 class="heading">قسم الستوك</h2>
@@ -140,10 +174,7 @@ footer{
  <div class="categories">
 
   <a class="category" href="stock-men.html">
-   <img
-    src="mmm.jpg"
-    alt="ملابس رجالي"
-   >
+   <img src="mmm.jpg" alt="ملابس رجالي">
    <div class="category-content">
     <h2>ستوك رجالي</h2>
     <p>تشكيلة الملابس الرجالي المتاحة في قسم الستوك</p>
@@ -152,10 +183,7 @@ footer{
   </a>
 
   <a class="category" href="stock-women.html">
-   <img
-    src="uni.jpg"
-    alt="ملابس حريمي"
-   >
+   <img src="uni.jpg" alt="ملابس حريمي">
    <div class="category-content">
     <h2>unisex</h2>
     <p>تشكيلة الunisex المتاحة في قسم الستوك</p>
@@ -167,6 +195,25 @@ footer{
 </div>
 
 <footer>LOLE FASHION BRANDS © 2026</footer>
+
+<script>
+const CART_KEY="lole_cart";
+
+function getCart(){
+ try{
+  return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+ }catch(e){
+  return [];
+ }
+}
+
+function updateCartCount(){
+ document.getElementById("cartCount").textContent=getCart().length;
+}
+
+updateCartCount();
+window.addEventListener("pageshow",updateCartCount);
+</script>
 
 </body>
 </html>
