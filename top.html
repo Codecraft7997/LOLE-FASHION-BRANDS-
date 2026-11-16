@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+<title>LOLE | توب حريمي</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ background:#090909;
+ color:#f5e6bd;
+ font-family:Tahoma,Arial,sans-serif;
+}
+
+header{
+ background:#111;
+ border-bottom:1px solid #b89545;
+ padding:22px 12px;
+ text-align:center;
+}
+
+header h1{
+ margin:0;
+ color:#d6b45e;
+ letter-spacing:2px;
+ font-size:25px;
+}
+
+header p{
+ color:#ddd;
+ margin:10px 0 0;
+}
+
+.back{
+ display:inline-block;
+ margin:18px;
+ padding:10px 20px;
+ color:#e8d18c;
+ border:1px solid #b89545;
+ border-radius:8px;
+ text-decoration:none;
+}
+
+.container{
+ padding:10px 15px 35px;
+}
+
+.heading{
+ text-align:center;
+ color:#d6b45e;
+ font-size:23px;
+ margin:15px 0 25px;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
+ gap:13px;
+ max-width:1100px;
+ margin:auto;
+}
+
+.product{
+ background:#151515;
+ border:1px solid #6e572b;
+ border-radius:12px;
+ overflow:hidden;
+ cursor:pointer;
+ transition:.2s;
+}
+
+.product:active{
+ transform:scale(.97);
+}
+
+.product img{
+ width:100%;
+ height:190px;
+ object-fit:cover;
+ display:block;
+ background:#222;
+}
+
+.info{
+ padding:12px;
+ text-align:center;
+}
+
+.code{
+ font-size:14px;
+ color:#e3c777;
+}
+
+.price{
+ font-size:16px;
+ color:white;
+ margin-top:8px;
+}
+
+.placeholder{
+ height:190px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:#c6a85c;
+ font-size:25px;
+ background:linear-gradient(145deg,#222,#090909);
+}
+
+.modal{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:#000e;
+ z-index:10;
+ align-items:center;
+ justify-content:center;
+ padding:15px;
+}
+
+.modal-box{
+ background:#151515;
+ border:1px solid #c3a451;
+ border-radius:15px;
+ padding:17px;
+ width:100%;
+ max-width:390px;
+ text-align:center;
+ max-height:90vh;
+ overflow-y:auto;
+}
+
+.modal-box img{
+ width:100%;
+ max-height:350px;
+ object-fit:contain;
+ border-radius:10px;
+}
+
+.modal-box h2{
+ color:#d6b45e;
+}
+
+.modal-box p{
+ color:white;
+}
+
+.buy,.close{
+ display:block;
+ width:100%;
+ padding:13px;
+ border-radius:8px;
+ margin-top:12px;
+ text-decoration:none;
+ border:0;
+ font-size:16px;
+ cursor:pointer;
+}
+
+.buy{
+ background:#c6a451;
+ color:#111;
+ font-weight:bold;
+}
+
+.close{
+ background:#333;
+ color:white;
+}
+
+footer{
+ text-align:center;
+ padding:20px;
+ color:#a88d4d;
+ font-size:13px;
+}
+
+@media(max-width:380px){
+ .grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+ }
+
+ .product img,.placeholder{
+  height:165px;
+ }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <h1>LOLE FASHION BRANDS</h1>
+ <p>TOP COLLECTION</p>
+</header>
+
+<a class="back" href="index.html">← رجوع للرئيسية</a>
+
+<div class="container">
+ <h2 class="heading">توب حريمي</h2>
+ <div class="grid" id="products"></div>
+</div>
+
+<div class="modal" id="modal">
+ <div class="modal-box">
+
+  <img id="modalImage" src="" alt="صورة المنتج">
+
+  <h2>تفاصيل المنتج</h2>
+  <p id="modalCode"></p>
+  <p id="modalPrice"></p>
+
+  <a class="buy" id="buyButton" href="#">
+   اذهب للشراء
+  </a>
+
+  <button class="close" onclick="closeProduct()">
+   إغلاق
+  </button>
+
+ </div>
+</div>
+
+<footer>
+ LOLE FASHION BRANDS © 2026
+</footer>
+
+<script>
+
+// عدّل كل منتج لوحده من هنا
+// code = كود المنتج
+// price = السعر
+// image = اسم الصورة
+
+const products = [
+
+ {code:"١a",price:600,image:"١a.jpg"},
+ {code:"١b",price:550,image:"١b.jpg"},
+ {code:"١c",price:550,image:"١c.jpg"},
+ {code:"١d",price:0,image:"١d.jpg"},
+ {code:"١e",price:0,image:"١e.jpg"},
+ {code:"١f",price:0,image:"١f.jpg"},
+ {code:"١g",price:0,image:"١g.jpg"},
+ {code:"١h",price:0,image:"١h.jpg"},
+ {code:"١i",price:0,image:"١i.jpg"},
+ {code:"١j",price:0,image:"١j.jpg"},
+
+ {code:"١k",price:0,image:"١k.jpg"},
+ {code:"١l",price:0,image:"١l.jpg"},
+ {code:"١m",price:0,image:"١m.jpg"},
+ {code:"١n",price:0,image:"١n.jpg"},
+ {code:"١o",price:0,image:"١o.jpg"},
+ {code:"١p",price:0,image:"١p.jpg"},
+ {code:"١q",price:0,image:"١q.jpg"},
+ {code:"١r",price:0,image:"١r.jpg"},
+ {code:"١s",price:0,image:"١s.jpg"},
+ {code:"١t",price:0,image:"١t.jpg"},
+
+ {code:"١u",price:0,image:"١u.jpg"},
+ {code:"١v",price:0,image:"١v.jpg"},
+ {code:"١w",price:0,image:"١w.jpg"},
+ {code:"١x",price:0,image:"١x.jpg"},
+ {code:"١y",price:0,image:"١y.jpg"},
+ {code:"١z",price:0,image:"١z.jpg"},
+
+ {code:"٢a",price:0,image:"٢a.jpg"},
+ {code:"٢b",price:0,image:"٢b.jpg"},
+ {code:"٢c",price:0,image:"٢c.jpg"},
+ {code:"٢d",price:0,image:"٢d.jpg"},
+ {code:"٢e",price:0,image:"٢e.jpg"},
+ {code:"٢f",price:0,image:"٢f.jpg"},
+ {code:"٢g",price:0,image:"٢g.jpg"},
+ {code:"٢h",price:0,image:"٢h.jpg"},
+ {code:"٢i",price:0,image:"٢i.jpg"},
+ {code:"٢j",price:0,image:"٢j.jpg"},
+
+ {code:"٢k",price:0,image:"٢k.jpg"},
+ {code:"٢l",price:0,image:"٢l.jpg"},
+ {code:"٢m",price:0,image:"٢m.jpg"},
+ {code:"٢n",price:0,image:"٢n.jpg"},
+ {code:"٢o",price:0,image:"٢o.jpg"},
+ {code:"٢p",price:0,image:"٢p.jpg"},
+ {code:"٢q",price:0,image:"٢q.jpg"},
+ {code:"٢r",price:0,image:"٢r.jpg"},
+ {code:"٢s",price:0,image:"٢s.jpg"},
+ {code:"٢t",price:0,image:"٢t.jpg"},
+
+ {code:"٢u",price:0,image:"٢u.jpg"},
+ {code:"٢v",price:0,image:"٢v.jpg"},
+ {code:"٢w",price:0,image:"٢w.jpg"},
+ {code:"٢x",price:0,image:"٢x.jpg"}
+
+];
+
+// عرض المنتجات
+const container=document.getElementById("products");
+
+products.forEach((product,index)=>{
+
+ const card=document.createElement("div");
+ card.className="product";
+
+ const placeholder=document.createElement("div");
+ placeholder.className="placeholder";
+ placeholder.textContent="فارغ";
+
+ const img=document.createElement("img");
+ img.src=product.image;
+ img.alt=product.code;
+
+ img.onerror=()=>{
+  img.replaceWith(placeholder);
+ };
+
+ const info=document.createElement("div");
+ info.className="info";
+
+ info.innerHTML=`
+  <div class="code">${product.code}</div>
+  <div class="price">${product.price} جنيه</div>
+ `;
+
+ card.appendChild(img);
+ card.appendChild(info);
+
+ card.addEventListener("click",()=>{
+  openProduct(index);
+ });
+
+ container.appendChild(card);
+
+});
+
+// فتح تفاصيل المنتج
+function openProduct(index){
+
+ const product=products[index];
+
+ const modalImage=document.getElementById("modalImage");
+
+ modalImage.src=product.image;
+
+ document.getElementById("modalCode").textContent=
+ "كود المنتج: "+product.code;
+
+ document.getElementById("modalPrice").textContent=
+ "السعر: "+product.price+" جنيه";
+
+ const imageURL=new URL(product.image,location.href).href;
+
+ document.getElementById("buyButton").href=
+ "terms.html?code="+encodeURIComponent(product.code)+
+ "&price="+encodeURIComponent(product.price)+
+ "&image="+encodeURIComponent(imageURL);
+
+ document.getElementById("modal").style.display="flex";
+}
+
+// إغلاق النافذة
+function closeProduct(){
+ document.getElementById("modal").style.display="none";
+}
+
+document.getElementById("modal").addEventListener("click",function(e){
+ if(e.target===this){
+  closeProduct();
+ }
+});
+
+</script>
+
+</body>
+</html>

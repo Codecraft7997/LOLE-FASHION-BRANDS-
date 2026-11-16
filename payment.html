@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090909">
+<title>LOLE | إتمام الطلب</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ background:#090909;
+ color:#f5e6bd;
+ font-family:Tahoma,Arial,sans-serif;
+}
+
+header{
+ background:#111;
+ border-bottom:1px solid #b89545;
+ padding:24px 12px;
+ text-align:center;
+}
+
+header h1{
+ margin:0;
+ color:#d6b45e;
+ font-size:25px;
+ letter-spacing:2px;
+}
+
+header p{color:#ddd;margin:9px 0 0}
+
+.container{
+ width:94%;
+ max-width:650px;
+ margin:25px auto;
+}
+
+.card{
+ background:#151515;
+ border:1px solid #80652f;
+ border-radius:14px;
+ padding:20px;
+ margin-bottom:18px;
+}
+
+h2{
+ color:#d6b45e;
+ font-size:20px;
+ margin:0 0 20px;
+}
+
+label{
+ display:block;
+ margin:15px 0 8px;
+ color:#e9d49a;
+ font-size:14px;
+}
+
+input,select,textarea{
+ width:100%;
+ padding:13px;
+ border:1px solid #66532e;
+ border-radius:8px;
+ background:#0d0d0d;
+ color:white;
+ font-family:inherit;
+ font-size:15px;
+ outline:none;
+}
+
+input:focus,select:focus,textarea:focus{
+ border-color:#d6b45e;
+}
+
+input[readonly]{
+ color:#d6b45e;
+ background:#202020;
+}
+
+textarea{resize:vertical;min-height:90px}
+
+button,.main-btn{
+ width:100%;
+ padding:14px;
+ border:0;
+ border-radius:8px;
+ background:#c6a451;
+ color:#111;
+ font-size:16px;
+ font-weight:bold;
+ cursor:pointer;
+ font-family:inherit;
+ text-decoration:none;
+ display:block;
+ text-align:center;
+ margin-top:15px;
+}
+
+.copy-btn{
+ background:#333;
+ color:#f5e6bd;
+}
+
+.summary-row{
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ padding:12px 0;
+ border-bottom:1px solid #383020;
+ font-size:14px;
+}
+
+.summary-row strong{color:#d6b45e}
+
+.total{
+ font-size:19px;
+ color:#e5c36b;
+}
+
+.notice{
+ background:#292214;
+ border:1px solid #8b7037;
+ border-radius:9px;
+ padding:14px;
+ line-height:1.9;
+ color:#f3e5bd;
+ font-size:14px;
+ margin-bottom:15px;
+}
+
+.free-shipping{
+ display:none;
+ background:#15351f;
+ border:1px solid #39864e;
+ color:#a5f0b5;
+ padding:12px;
+ border-radius:9px;
+ text-align:center;
+ font-weight:bold;
+ margin-bottom:15px;
+}
+
+.small{
+ color:#aaa;
+ font-size:12px;
+ line-height:1.8;
+}
+
+.product-image{
+ width:100%;
+ max-width:260px;
+ max-height:320px;
+ min-height:100px;
+ object-fit:contain;
+ display:none;
+ margin:0 auto 18px;
+ border:1px solid #66532e;
+ border-radius:10px;
+ background:#0d0d0d;
+}
+
+.image-link{
+ display:block;
+ color:#d6b45e;
+ text-align:center;
+ font-size:12px;
+ margin-bottom:15px;
+ word-break:break-all;
+}
+
+footer{
+ text-align:center;
+ padding:20px;
+ color:#a88d4d;
+ font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <h1>LOLE FASHION BRANDS</h1>
+ <p>إتمام الطلب والدفع</p>
+</header>
+
+<div class="container">
+
+ <!-- بيانات المنتج -->
+ <div class="card">
+  <h2>بيانات المنتج</h2>
+
+  <img id="productImage"
+       class="product-image"
+       alt="صورة المنتج">
+
+  <p id="imageError" class="small"
+     style="display:none;text-align:center">
+   صورة المنتج غير متاحة للعرض.
+  </p>
+
+  <label>كود المنتج</label>
+  <input id="productCode" readonly>
+
+  <label>سعر القطعة</label>
+  <input id="productPrice" readonly>
+ </div>
+
+ <!-- بيانات العميل -->
+ <div class="card">
+  <h2>بيانات العميل</h2>
+
+  <label>الاسم بالكامل</label>
+  <input id="customerName" placeholder="اكتب اسمك بالكامل">
+
+  <label>رقم الموبايل</label>
+  <input id="phone" type="tel" placeholder="01xxxxxxxxx">
+
+  <label>رقم موبايل بديل (اختياري)</label>
+  <input id="phone2" type="tel" placeholder="01xxxxxxxxx">
+ </div>
+
+ <!-- عنوان التوصيل -->
+ <div class="card">
+  <h2>عنوان التوصيل</h2>
+
+  <label>المحافظة</label>
+  <select id="governorate">
+   <option value="">اختر المحافظة</option>
+  </select>
+
+  <label>المركز / المدينة</label>
+  <select id="center" disabled>
+   <option value="">اختر المحافظة أولاً</option>
+  </select>
+
+  <label>العنوان بالتفصيل</label>
+  <textarea id="address"
+   placeholder="اسم الشارع ورقم المنزل وأي علامة مميزة"></textarea>
+ </div>
+
+ <!-- ملخص الحساب -->
+ <div class="card">
+  <h2>ملخص الحساب</h2>
+
+  <div class="notice">
+   عرض LOLE الخاص!
+   <br>
+   الأوردر بقيمة 1500 جنيه أو أكثر = توصيل مجاني بالكامل.
+  </div>
+
+  <div class="free-shipping" id="freeShippingMessage">
+   مبروك! حصلت على التوصيل المجاني.
+  </div>
+
+  <div class="summary-row">
+   <span>سعر القطعة</span>
+   <strong id="unitPriceView">0 جنيه</strong>
+  </div>
+
+  <div class="summary-row">
+   <span>إجمالي المنتجات</span>
+   <strong id="priceView">0 جنيه</strong>
+  </div>
+
+  <div class="summary-row">
+   <span>سعر التوصيل</span>
+   <strong id="shippingView">0 جنيه</strong>
+  </div>
+
+  <div class="summary-row total">
+   <span>الإجمالي</span>
+   <strong id="totalView">0 جنيه</strong>
+  </div>
+
+  <div class="summary-row">
+   <span>العربون المطلوب</span>
+   <strong>150 جنيه</strong>
+  </div>
+
+  <div class="summary-row">
+   <span>المتبقي عند الاستلام</span>
+   <strong id="remainingView">0 جنيه</strong>
+  </div>
+ </div>
+
+ <!-- الدفع -->
+ <div class="card">
+  <h2>طريقة دفع العربون</h2>
+
+  <div class="notice">
+   برجاء تحويل مبلغ <strong>150 جنيه</strong> على الرقم التالي:
+   <br>
+
+   <strong id="paymentNumber">01043535125</strong>
+
+   <button type="button" class="copy-btn" onclick="copyNumber()">
+    نسخ رقم التحويل
+   </button>
+
+   <p class="small" style="color:#f3e5bd;margin-bottom:0">
+    احتفظ بصورة إيصال التحويل لإرفاقها وإرسالها عبر واتساب بعد إتمام بيانات الطلب.
+   </p>
+  </div>
+ </div>
+
+ <!-- تأكيد الطلب -->
+ <div class="card">
+  <h2>تأكيد الطلب</h2>
+
+  <p class="small">
+   راجع بياناتك والعنوان والمبلغ قبل إرسال الطلب.
+   بعد الانتقال إلى واتساب، أرفق صورة إيصال التحويل في المحادثة بنفسك.
+  </p>
+
+  <button type="button" onclick="sendOrder()">
+   تأكيد الطلب عبر واتساب وارسال صورة التحويل
+  </button>
+ </div>
+
+</div>
+
+<footer>LOLE FASHION BRANDS © 2026</footer>
+
+<script>
+
+// أرقام التحويل وواتساب
+const paymentNumber = "01043535125";
+const whatsappNumber = "201043535125";
+
+const deposit = 150;
+const freeShippingLimit = 1500;
+
+// بيانات المنتج القادمة من صفحة المنتجات
+const params = new URLSearchParams(location.search);
+
+const code = params.get("code") || "";
+const price = Number(params.get("price"));
+const imageURL = params.get("image") || "";
+
+// عرض بيانات المنتج
+document.getElementById("productCode").value = code;
+
+document.getElementById("productPrice").value =
+ Number.isFinite(price) && price > 0
+ ? price + " جنيه"
+ : "";
+
+// =================================
+// عرض صورة المنتج تلقائياً
+// =================================
+
+const productImage = document.getElementById("productImage");
+const imageError = document.getElementById("imageError");
+
+const imageExtensions = ["jpg", "jpeg", "png", "webp"];
+
+let imageCandidates = [];
+let currentImageIndex = 0;
+
+if(imageURL){
+ imageCandidates.push(imageURL);
+}
+
+if(code){
+ imageExtensions.forEach(ext => {
+  imageCandidates.push(code + "." + ext);
+ });
+}
+
+function tryNextImage(){
+
+ if(currentImageIndex >= imageCandidates.length){
+
+  productImage.style.display = "none";
+  imageError.style.display = "block";
+
+  return;
+ }
+
+ const candidate = imageCandidates[currentImageIndex++];
+
+ productImage.src = candidate;
+}
+
+productImage.onload = function(){
+
+ productImage.style.display = "block";
+ imageError.style.display = "none";
+
+};
+
+productImage.onerror = function(){
+
+ tryNextImage();
+
+};
+
+if(code || imageURL){
+
+ imageError.style.display = "none";
+ productImage.style.display = "block";
+
+ tryNextImage();
+
+}else{
+
+ productImage.style.display = "none";
+ imageError.style.display = "block";
+
+}
+
+// =================================
+// المحافظات والمراكز
+// =================================
+
+const areas = {
+
+ "القاهرة":["القاهرة","مدينة نصر","مصر الجديدة","المعادي","حلوان","شبرا","عين شمس","التجمع","المرج","المطرية"],
+
+ "الجيزة":["الجيزة","6 أكتوبر","الشيخ زايد","الدقي","المهندسين","العجوزة","فيصل","الهرم","البدرشين","أوسيم"],
+
+ "الإسكندرية":["الإسكندرية","برج العرب","العجمي","المنتزه","العامرية","محرم بك"],
+
+ "الدقهلية":["المنصورة","طلخا","ميت غمر","أجا","السنبلاوين","دكرنس","منية النصر","بلقاس","شربين","نبروه","تمي الأمديد","الجمالية","المطرية","المنزلة","بني عبيد","ميت سلسيل","الكردي","جمصة"],
+
+ "الشرقية":["الزقازيق","العاشر من رمضان","بلبيس","منيا القمح","أبو حماد","فاقوس","أبو كبير","ههيا","ديرب نجم","الإبراهيمية","الحسينية","كفر صقر","أولاد صقر"],
+
+ "الغربية":["طنطا","المحلة الكبرى","كفر الزيات","زفتى","السنطة","بسيون","قطور","سمنود"],
+
+ "القليوبية":["بنها","شبرا الخيمة","قليوب","القناطر الخيرية","الخانكة","الخصوص","العبور","كفر شكر","طوخ","شبين القناطر"],
+
+ "المنوفية":["شبين الكوم","منوف","أشمون","قويسنا","تلا","الباجور","بركة السبع","السادات","سرس الليان","الشهداء"],
+
+ "البحيرة":["دمنهور","كفر الدوار","رشيد","إدكو","أبو حمص","أبو المطامير","الدلنجات","إيتاي البارود","شبراخيت","حوش عيسى","كوم حمادة","النوبارية"],
+
+ "كفر الشيخ":["كفر الشيخ","دسوق","فوه","مطوبس","بلطيم","الحامول","بيلا","سيدي سالم","قلين","الرياض"],
+
+ "دمياط":["دمياط","دمياط الجديدة","فارسكور","الزرقا","كفر سعد","رأس البر"],
+
+ "بورسعيد":["بورسعيد","بورفؤاد"],
+
+ "الإسماعيلية":["الإسماعيلية","فايد","القنطرة شرق","القنطرة غرب","التل الكبير","أبو صوير"],
+
+ "السويس":["السويس","الأربعين","عتاقة","الجناين"],
+
+ "الفيوم":["الفيوم","سنورس","إطسا","طامية","أبشواي","يوسف الصديق"],
+
+ "بني سويف":["بني سويف","الواسطى","ناصر","إهناسيا","ببا","سمسطا","الفشن"],
+
+ "المنيا":["المنيا","ملوي","مغاغة","بني مزار","أبو قرقاص","سمالوط","مطاي","دير مواس","العدوة"],
+
+ "أسيوط":["أسيوط","ديروط","منفلوط","القوصية","أبنوب","الفتح","أبو تيج","الغنايم","ساحل سليم","البداري"],
+
+ "سوهاج":["سوهاج","أخميم","جرجا","طهطا","المراغة","البلينا","المنشأة","دار السلام","ساقلتة"],
+
+ "قنا":["قنا","نجع حمادي","دشنا","قفط","قوص","أبو تشت","فرشوط","نقادة"],
+
+ "الأقصر":["الأقصر","إسنا","أرمنت","القرنة","البياضية","الزينية"],
+
+ "أسوان":["أسوان","كوم أمبو","إدفو","دراو","نصر النوبة"],
+
+ "البحر الأحمر":["الغردقة","رأس غارب","سفاجا","القصير","مرسى علم"],
+
+ "الوادي الجديد":["الخارجة","الداخلة","الفرافرة","باريس","بلاط"],
+
+ "مطروح":["مرسى مطروح","الحمام","العلمين","الضبعة","سيوة","النجيلة","سيدي براني"]
+
+};
+
+// =================================
+// أسعار الشحن
+// =================================
+
+const shipping = {
+
+ "القاهرة":95,
+ "الجيزة":95,
+ "الإسكندرية":95,
+ "الدقهلية":70,
+ "الشرقية":85,
+ "الغربية":85,
+ "القليوبية":85,
+ "المنوفية":85,
+ "البحيرة":95,
+ "كفر الشيخ":85,
+ "دمياط":85,
+ "بورسعيد":95,
+ "الإسماعيلية":95,
+ "السويس":95,
+ "الفيوم":130,
+ "بني سويف":130,
+ "المنيا":130,
+ "أسيوط":140,
+ "سوهاج":130,
+ "قنا":130,
+ "الأقصر":140,
+ "أسوان":140,
+ "البحر الأحمر":160,
+ "الوادي الجديد":0,
+ "مطروح":150
+
+};
+
+// تعبئة المحافظات
+const governorate = document.getElementById("governorate");
+const center = document.getElementById("center");
+
+Object.keys(areas).forEach(name=>{
+
+ const option = document.createElement("option");
+
+ option.value = name;
+ option.textContent = name;
+
+ governorate.appendChild(option);
+
+});
+
+// تغيير المحافظة
+governorate.addEventListener("change",()=>{
+
+ center.innerHTML = '<option value="">اختر المركز / المدينة</option>';
+
+ const selected = governorate.value;
+
+ if(!selected){
+
+  center.disabled = true;
+
+  updateTotals();
+
+  return;
+ }
+
+ areas[selected].forEach(name=>{
+
+  const option = document.createElement("option");
+
+  option.value = name;
+  option.textContent = name;
+
+  center.appendChild(option);
+
+ });
+
+ center.disabled = false;
+
+ updateTotals();
+
+});
+
+// =================================
+// حساب الإجمالي لقطعة واحدة
+// =================================
+
+function updateTotals(){
+
+ const selected = governorate.value;
+
+ const unitPrice =
+ Number.isFinite(price) && price > 0 ? price : 0;
+
+ const productTotal = unitPrice;
+
+ const isFreeShipping =
+ productTotal >= freeShippingLimit;
+
+ const shippingCost = isFreeShipping
+ ? 0
+ : (selected ? Number(shipping[selected]||0) : 0);
+
+ const total = productTotal + shippingCost;
+
+ const remaining = Math.max(0,total-deposit);
+
+ document.getElementById("unitPriceView").textContent =
+ unitPrice + " جنيه";
+
+ document.getElementById("priceView").textContent =
+ productTotal + " جنيه";
+
+ document.getElementById("shippingView").textContent =
+ isFreeShipping ? "مجاني" : shippingCost + " جنيه";
+
+ document.getElementById("totalView").textContent =
+ total + " جنيه";
+
+ document.getElementById("remainingView").textContent =
+ remaining + " جنيه";
+
+ document.getElementById("freeShippingMessage").style.display =
+ isFreeShipping ? "block" : "none";
+
+}
+
+// =================================
+// نسخ رقم التحويل
+// =================================
+
+function copyNumber(){
+
+ const note =
+ "احتفظ بصورة إيصال التحويل لإرفاقها وإرسالها عبر واتساب بعد إتمام بيانات الطلب.";
+
+ function copied(){
+
+  alert("تم نسخ رقم التحويل بنجاح\n\n" + note);
+
+ }
+
+ if(navigator.clipboard && navigator.clipboard.writeText){
+
+  navigator.clipboard.writeText(paymentNumber)
+   .then(copied)
+   .catch(()=>{
+
+    alert("رقم التحويل: " + paymentNumber + "\n\n" + note);
+
+   });
+
+ }else{
+
+  alert("رقم التحويل: " + paymentNumber + "\n\n" + note);
+
+ }
+
+}
+
+// =================================
+// إرسال الطلب عبر واتساب 
+// =================================
+
+function sendOrder(){
+
+ const name =
+ document.getElementById("customerName").value.trim();
+
+ const phone =
+ document.getElementById("phone").value.trim();
+
+ const phone2 =
+ document.getElementById("phone2").value.trim();
+
+ const address =
+ document.getElementById("address").value.trim();
+
+ const gov = governorate.value;
+ const city = center.value;
+
+ const unitPrice = Number(price);
+
+ const productPrice = unitPrice;
+
+ // التأكد من بيانات المنتج
+ if(!code || !Number.isFinite(unitPrice) || unitPrice<=0){
+
+  alert("بيانات المنتج غير صحيحة. ارجع للمنتج واختره مرة أخرى.");
+
+  return;
+ }
+
+ // التأكد من بيانات العميل
+ if(!name || !phone || !address || !gov || !city){
+
+  alert("من فضلك أكمل جميع بيانات العميل والعنوان.");
+
+  return;
+ }
+
+ // التحقق من أرقام الموبايل
+ const egyptPhone = /^01[0125][0-9]{8}$/;
+
+ if(!egyptPhone.test(phone)){
+
+  alert("رقم الموبايل غير صحيح. اكتب رقم مصري مكون من 11 رقم.");
+
+  return;
+ }
+
+ if(phone2 && !egyptPhone.test(phone2)){
+
+  alert("رقم الموبايل البديل غير صحيح.");
+
+  return;
+ }
+
+ // حساب الشحن والإجمالي
+ const isFreeShipping = productPrice >= freeShippingLimit;
+
+ const shippingCost = isFreeShipping
+ ? 0
+ : Number(shipping[gov]||0);
+
+ const total = productPrice + shippingCost;
+
+ const remaining = Math.max(0,total-deposit);
+
+ // رسالة الطلب
+ const message =
+`طلب جديد من LOLE FASHION BRANDS
+
+كود المنتج: ${code}
+رابط صورة المنتج: ${imageURL || "صورة محلية باسم كود المنتج"}
+سعر القطعة: ${unitPrice} جنيه
+إجمالي المنتجات: ${productPrice} جنيه
+
+المحافظة: ${gov}
+المركز / المدينة: ${city}
+الشحن: ${isFreeShipping ? "مجاني" : shippingCost+" جنيه"}
+
+الإجمالي: ${total} جنيه
+العربون المطلوب: ${deposit} جنيه
+المتبقي عند الاستلام: ${remaining} جنيه
+
+اسم العميل: ${name}
+رقم الموبايل: ${phone}
+رقم بديل: ${phone2 || "غير متوفر"}
+
+العنوان بالتفصيل: ${address}
+
+رقم التحويل: ${paymentNumber}
+
+ملاحظة: يرجى إرفاق صورة إيصال تحويل العربون في هذه المحادثة لإتمام تأكيد الطلب.`;
+
+ const whatsappURL =
+ "https://wa.me/" + whatsappNumber +
+ "?text=" + encodeURIComponent(message);
+
+ window.open(whatsappURL,"_blank");
+
+}
+
+// تحديث الحساب عند فتح الصفحة
+updateTotals();
+
+</script>
+
+</body>
+</html>

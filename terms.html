@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شروط الطلب | LOLE</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ background:#090909;
+ color:#eee;
+ font-family:'Cairo',sans-serif;
+ padding:25px 15px;
+}
+
+.container{
+ max-width:650px;
+ margin:35px auto;
+ background:#111;
+ border:1px solid #a88945;
+ border-radius:15px;
+ padding:25px;
+}
+
+.logo{
+ text-align:center;
+ color:#d9b66b;
+ font-size:25px;
+ font-weight:800;
+ letter-spacing:1px;
+}
+
+.subtitle{
+ text-align:center;
+ color:#aaa;
+ margin:5px 0 25px;
+ font-size:13px;
+}
+
+h2{
+ color:#e0bd72;
+ text-align:center;
+ font-size:21px;
+ margin-bottom:25px;
+}
+
+.condition{
+ border-bottom:1px solid #292929;
+ padding:13px 0;
+ font-size:14px;
+ line-height:2;
+ color:#ddd;
+}
+
+.condition strong{
+ color:#e1bf78;
+}
+
+.confirm{
+ margin-top:25px;
+ display:flex;
+ align-items:flex-start;
+ gap:10px;
+ font-size:13px;
+ color:#ddd;
+ line-height:1.8;
+}
+
+.confirm input{
+ margin-top:7px;
+ accent-color:#d9b66b;
+ width:18px;
+ height:18px;
+ flex-shrink:0;
+}
+
+button{
+ width:100%;
+ padding:14px;
+ border:0;
+ border-radius:8px;
+ font-family:inherit;
+ font-weight:800;
+ cursor:pointer;
+ margin-top:18px;
+}
+
+.accept{
+ background:#d9b66b;
+ color:#111;
+}
+
+.accept:disabled{
+ opacity:.4;
+ cursor:not-allowed;
+}
+
+.back{
+ background:transparent;
+ color:#ddd;
+ border:1px solid #444;
+ margin-top:10px;
+}
+
+.footer{
+ text-align:center;
+ color:#aaa;
+ font-size:12px;
+ margin-top:25px;
+ line-height:2;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+ <div class="logo">LOLE</div>
+ <div class="subtitle">FASHION BRANDS</div>
+
+ <h2>شروط وأحكام الطلب</h2>
+
+ <div class="condition">
+ <strong>1. الاسترجاع والاستبدال:</strong>
+ لا يُقبل الاسترجاع أو الاستبدال بسبب تغيير الرأي أو عدم مناسبة المقاس، مع مراعاة حقوق المستهلك القانونية.
+ </div>
+
+ <div class="condition">
+ <strong>2. تفاصيل المنتجات:</strong>
+ جميع القطع مصورة على الطبيعة بعلاماتها التجارية الأصلية، ومقاساتها موضحة بالتفصيل، وكل قطعة فريدة وغير مكررة.
+ </div>
+
+ <div class="condition">
+ <strong>3. حالة قطع الستوك:</strong>
+ القطع ليست جديدة بالكامل بالضرورة، لكنها مختارة بجودة وخامات ممتازة وأسعار مخفضة. قد تحتوي على ملاحظات بسيطة مثل نقص اللوجو أو بقع أو بهتان خفيف، وأي عيب كبير يتم ذكره في وصف القطعة.
+ </div>
+
+ <div class="condition">
+ <strong>4. الشحن والمعاينة:</strong>
+ المعاينة متاحة قبل الاستلام، والعربون (150 جنيه) غير مسترد عند رفض الطلب، مع مراعاة الحقوق القانونية للمستهلك.
+ </div>
+
+ <div class="condition">
+ <strong>5. حالة القطع عند الشحن:</strong>
+ قد تصل بعض القطع غير مكوية بالكامل بسبب الشحن.
+ </div>
+
+ <label class="confirm">
+ <input type="checkbox" id="agree">
+ <span>قرأت الشروط والأحكام وأوافق عليها، وأرغب في متابعة إتمام الطلب.</span>
+ </label>
+
+ <button class="accept" id="continue" disabled onclick="goToPayment()">
+ أوافق على الشروط وأتابع للشراء
+ </button>
+
+ <button class="back" onclick="history.back()">
+ رجوع
+ </button>
+
+ <div class="footer">
+ إتمام الطلب ودفع العربون يعني الموافقة على الشروط المذكورة، بما لا يخالف القانون.
+ <br><br>
+ شكرًا لثقتك في<br>
+ <strong style="color:#d9b66b">LOLE FASHION BRANDS</strong>
+ </div>
+
+</div>
+
+<script>
+const agree = document.getElementById("agree");
+const btn = document.getElementById("continue");
+
+agree.addEventListener("change",()=>{
+ btn.disabled = !agree.checked;
+});
+
+function goToPayment(){
+ if(!agree.checked)return;
+
+ // الاحتفاظ بكود المنتج وبياناته
+ const params = new URLSearchParams(location.search);
+
+ // غيّر payment.html لاسم صفحة الشراء الموجودة عندك
+ location.href = "payment.html" + location.search;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080808">
+<title>بلوفر حريمي | LOLE FASHION BRANDS</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#090909;color:white;font-family:Cairo,sans-serif}
+header{padding:20px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #493a26}
+.logo{color:#d9b66b;font-size:19px;font-weight:900}
+.back{color:#e5c47d;text-decoration:none;font-size:13px}
+.container{max-width:1100px;margin:auto;padding:35px 15px}
+.heading{text-align:center;margin-bottom:30px}
+.heading h1{color:#e5c47d;font-size:28px}
+.heading p{color:#888;font-size:13px;margin-top:7px}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.product{background:#151515;border:1px solid #403525;border-radius:14px;overflow:hidden;cursor:pointer;transition:.3s}
+.product:hover{border-color:#d9b66b;transform:translateY(-4px)}
+.product img{width:100%;height:230px;object-fit:cover;display:block;background:#211b10}
+.no-image{height:230px;display:flex;align-items:center;justify-content:center;background:#211b10;color:#d9b66b;font-size:30px}
+.info{padding:13px;text-align:center}
+.code{color:#999;font-size:12px;direction:ltr}
+.price{color:#e5c47d;font-weight:900;font-size:18px;margin:7px 0}
+.info button{width:100%;border:0;padding:10px;border-radius:8px;background:linear-gradient(120deg,#a77c35,#f1d69b);color:#111;font-family:inherit;font-weight:900;cursor:pointer}
+.modal{display:none;position:fixed;inset:0;background:#000e;z-index:10;align-items:center;justify-content:center;padding:15px}
+.modal.show{display:flex}
+.modal-content{width:100%;max-width:420px;background:#171717;border:1px solid #b99550;border-radius:18px;padding:18px;text-align:center;position:relative;max-height:90vh;overflow:auto}
+.close{position:absolute;top:8px;left:13px;background:none;color:white;border:0;font-size:27px;cursor:pointer}
+.modal img{width:100%;height:280px;object-fit:contain;border-radius:10px;margin:15px 0}
+.modal h2{color:#e5c47d}
+.modal p{color:#aaa;margin:8px 0}
+.modal-price{color:#e5c47d;font-size:23px;font-weight:900}
+.buy{display:block;background:linear-gradient(120deg,#a77c35,#f1d69b);color:#111;text-decoration:none;padding:13px;border-radius:10px;font-weight:900;margin-top:15px}
+footer{text-align:center;padding:25px;border-top:1px solid #292218;color:#777;font-size:12px}
+@media(max-width:700px){
+.products{grid-template-columns:repeat(2,1fr);gap:10px}
+.product img,.no-image{height:190px}
+.logo{font-size:14px}
+}
+@media(max-width:380px){.products{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">LOLE FASHION BRANDS</div>
+<a href="new-women.html" class="back">← رجوع</a>
+</header>
+
+<main class="container">
+<div class="heading">
+<h1>بلوفر حريمي</h1>
+<p>اكتشفي مجموعتنا واختاري المفضل لديكِ</p>
+</div>
+<div class="products" id="products"></div>
+</main>
+
+<div class="modal" id="modal" onclick="closeOutside(event)">
+<div class="modal-content">
+<button class="close" onclick="closeModal()">×</button>
+<img id="modalImage" src="" alt="صورة المنتج">
+<h2>تفاصيل المنتج</h2>
+<p id="modalCode"></p>
+<div class="modal-price" id="modalPrice"></div>
+<a href="#" id="buyButton" class="buy">اذهب للشراء ←</a>
+</div>
+</div>
+
+<footer>LOLE FASHION BRANDS © 2026</footer>
+
+<script>
+
+// =====================================
+// المنتجات
+// عدل الكود والسعر واسم الصورة من هنا
+// =====================================
+
+const products = [
+
+{code:"1",price:700,image:"1.jpg"},
+{code:"2",price:600,image:"2.jpg"},
+{code:"3",price:700,image:"3.jpg"},
+{code:"4",price:700,image:"4.jpg"},
+{code:"5",price:750,image:"5.jpg"},
+{code:"6",price:800,image:"6.jpg"},
+{code:"7",price:700,image:"7.jpg"},
+{code:"8",price:700,image:"8.jpg"},
+{code:"9",price:700,image:"9.jpg"},
+{code:"10",price:750,image:"10.jpg"},
+{code:"11",price:750,image:"11.jpg"},
+{code:"12",price:650,image:"12.jpg"},
+{code:"13",price:650,image:"13.jpg"},
+{code:"14",price:600,image:"14.jpg"},
+{code:"15",price:700,image:"15.jpg"},
+{code:"16",price:600,image:"16.jpg"},
+{code:"17",price:0,image:"17.jpg"},
+{code:"18",price:0,image:"18.jpg"},
+{code:"19",price:0,image:"19.jpg"},
+{code:"20",price:0,image:"20.jpg"},
+{code:"21",price:0,image:"21.jpg"},
+{code:"22",price:0,image:"22.jpg"},
+{code:"23",price:0,image:"23.jpg"},
+{code:"24",price:0,image:"24.jpg"},
+{code:"25",price:0,image:"25.jpg"},
+{code:"26",price:0,image:"26.jpg"},
+{code:"27",price:0,image:"27.jpg"},
+{code:"28",price:0,image:"28.jpg"},
+{code:"29",price:0,image:"29.jpg"},
+{code:"30",price:0,image:"30.jpg"},
+{code:"31",price:0,image:"31.jpg"},
+{code:"32",price:0,image:"32.jpg"},
+{code:"33",price:0,image:"33.jpg"},
+{code:"34",price:0,image:"34.jpg"},
+{code:"35",price:0,image:"35.jpg"},
+{code:"36",price:0,image:"36.jpg"},
+{code:"37",price:0,image:"37.jpg"},
+{code:"38",price:0,image:"38.jpg"},
+{code:"39",price:0,image:"39.jpg"},
+{code:"40",price:0,image:"40.jpg"},
+{code:"41",price:0,image:"41.jpg"},
+{code:"42",price:0,image:"42.jpg"},
+{code:"43",price:0,image:"43.jpg"},
+{code:"44",price:0,image:"44.jpg"},
+{code:"45",price:0,image:"45.jpg"},
+{code:"46",price:0,image:"46.jpg"},
+{code:"47",price:0,image:"47.jpg"},
+{code:"48",price:0,image:"48.jpg"},
+{code:"49",price:0,image:"49.jpg"},
+{code:"50",price:0,image:"50.jpg"}
+
+];
+
+// =====================================
+// عرض المنتجات
+// =====================================
+
+const container=document.getElementById("products");
+
+products.forEach((product,index)=>{
+
+const card=document.createElement("div");
+card.className="product";
+
+card.innerHTML=`
+<img src="${product.image}" alt="${product.code}"
+onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+
+<div class="no-image" style="display:none">فارغ</div>
+
+<div class="info">
+<div class="code">${product.code}</div>
+<div class="price">${product.price} جنيه</div>
+<button type="button">عرض المنتج</button>
+</div>
+`;
+
+card.addEventListener("click",()=>openProduct(index));
+container.appendChild(card);
+
+});
+
+// =====================================
+// تفاصيل المنتج والشراء
+// =====================================
+
+function openProduct(index){
+
+const product=products[index];
+
+document.getElementById("modalImage").src=product.image;
+document.getElementById("modalCode").textContent="كود المنتج: "+product.code;
+document.getElementById("modalPrice").textContent=product.price+" جنيه";
+
+const imageURL=new URL(product.image,location.href).href;
+
+document.getElementById("buyButton").href=
+"terms.html?code="+encodeURIComponent(product.code)+
+"&price="+encodeURIComponent(product.price)+
+"&image="+encodeURIComponent(imageURL);
+
+document.getElementById("modal").classList.add("show");
+}
+
+// =====================================
+// إغلاق النافذة
+// =====================================
+
+function closeModal(){
+document.getElementById("modal").classList.remove("show");
+}
+
+function closeOutside(event){
+if(event.target.id==="modal")closeModal();
+}
+
+</script>
+</body>
+</html>
