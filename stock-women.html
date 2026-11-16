@@ -13,7 +13,44 @@ body{margin:0;background:#090909;color:#f5e6bd;font-family:Tahoma,Arial,sans-ser
 header{background:#111;border-bottom:1px solid #b89545;padding:22px 12px;text-align:center}
 header h1{margin:0;color:#d6b45e;letter-spacing:2px;font-size:25px}
 header p{color:#ddd;margin:10px 0 0}
-.back{display:inline-block;margin:18px;padding:10px 20px;color:#e8d18c;border:1px solid #b89545;border-radius:8px;text-decoration:none}
+
+.header-actions{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ flex-wrap:wrap;
+}
+
+.back,.cart-link{
+ display:inline-block;
+ margin:18px 8px;
+ padding:10px 18px;
+ color:#e8d18c;
+ border:1px solid #b89545;
+ border-radius:8px;
+ text-decoration:none;
+}
+
+.cart-link{
+ background:#c6a451;
+ color:#111;
+ font-weight:bold;
+}
+
+.cart-count{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ background:#111;
+ color:#e8d18c;
+ border-radius:50%;
+ min-width:23px;
+ height:23px;
+ margin-right:5px;
+ font-size:12px;
+}
+
 .container{padding:10px 15px 35px}
 .heading{text-align:center;color:#d6b45e;font-size:23px;margin:15px 0 25px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:13px;max-width:1100px;margin:auto}
@@ -29,13 +66,26 @@ header p{color:#ddd;margin:10px 0 0}
 .modal-box img{width:100%;max-height:350px;object-fit:contain;border-radius:10px}
 .modal-box h2{color:#d6b45e}
 .modal-box p{color:white}
-.buy,.close{display:block;width:100%;padding:13px;border-radius:8px;margin-top:12px;text-decoration:none;border:0;font-size:16px;cursor:pointer}
+
+.buy,.close{
+ display:block;
+ width:100%;
+ padding:13px;
+ border-radius:8px;
+ margin-top:12px;
+ text-decoration:none;
+ border:0;
+ font-size:16px;
+ cursor:pointer;
+}
+
 .buy{background:#c6a451;color:#111;font-weight:bold}
 .close{background:#333;color:white}
 footer{text-align:center;padding:20px;color:#a88d4d;font-size:13px}
+
 @media(max-width:380px){
-.grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-.product img,.placeholder{height:165px}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .product img,.placeholder{height:165px}
 }
 </style>
 </head>
@@ -47,7 +97,14 @@ footer{text-align:center;padding:20px;color:#a88d4d;font-size:13px}
 <p>UNISEX STOCK</p>
 </header>
 
-<a class="back" href="stock.html">← رجوع للستوك</a>
+<div class="header-actions">
+ <a class="back" href="stock.html">← رجوع للستوك</a>
+
+ <a class="cart-link" href="cart.html">
+  🛒 السلة
+  <span class="cart-count" id="cartCount">0</span>
+ </a>
+</div>
 
 <div class="container">
 <h2 class="heading">تشكيلة الunisex</h2>
@@ -60,7 +117,11 @@ footer{text-align:center;padding:20px;color:#a88d4d;font-size:13px}
 <h2>تفاصيل المنتج</h2>
 <p id="modalCode"></p>
 <p id="modalPrice"></p>
-<a class="buy" id="buyButton" href="#">اذهب للشراء</a>
+
+<button class="buy" id="addButton" onclick="addToCart()">
+ + إضافة إلى السلة
+</button>
+
 <button class="close" onclick="closeProduct()">إغلاق</button>
 </div>
 </div>
@@ -68,6 +129,26 @@ footer{text-align:center;padding:20px;color:#a88d4d;font-size:13px}
 <footer>LOLE FASHION BRANDS © 2026</footer>
 
 <script>
+
+// نظام السلة الموحد
+const CART_KEY="lole_cart";
+
+function getCart(){
+ try{
+  return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+ }catch(e){
+  return [];
+ }
+}
+
+function updateCartCount(){
+ const cart=getCart();
+ document.getElementById("cartCount").textContent=cart.length;
+}
+
+let selectedProduct=null;
+
+// المنتجات
 const products = [
 {code:"1١",price:450,image:"1١.jpg"},
 {code:"2٢",price:400,image:"2٢.jpg"},
@@ -121,58 +202,99 @@ const products = [
 {code:"50٥٠",price:0,image:"50٥٠.jpg"}
 ];
 
+// عرض المنتجات
 const container=document.getElementById("products");
 
 products.forEach((product,index)=>{
-const card=document.createElement("div");
-card.className="product";
+ const card=document.createElement("div");
+ card.className="product";
 
-const placeholder=document.createElement("div");
-placeholder.className="placeholder";
-placeholder.textContent="فارغ";
+ const placeholder=document.createElement("div");
+ placeholder.className="placeholder";
+ placeholder.textContent="فارغ";
 
-const img=document.createElement("img");
-img.src=product.image;
-img.alt="UNISEX";
-img.onerror=()=>img.replaceWith(placeholder);
+ const img=document.createElement("img");
+ img.src=product.image;
+ img.alt="UNISEX";
+ img.onerror=()=>img.replaceWith(placeholder);
 
-const info=document.createElement("div");
-info.className="info";
-info.innerHTML=`
-<div class="code">${product.code}</div>
-<div class="price">${product.price} جنيه</div>
-`;
+ const info=document.createElement("div");
+ info.className="info";
+ info.innerHTML=`
+ <div class="code">${product.code}</div>
+ <div class="price">${product.price} جنيه</div>
+ `;
 
-card.appendChild(img);
-card.appendChild(info);
-card.addEventListener("click",()=>openProduct(index));
-container.appendChild(card);
+ card.appendChild(img);
+ card.appendChild(info);
+ card.addEventListener("click",()=>openProduct(index));
+ container.appendChild(card);
 });
 
+// فتح تفاصيل المنتج
 function openProduct(index){
-const product=products[index];
 
-document.getElementById("modalImage").src=product.image;
-document.getElementById("modalCode").textContent="كود المنتج: "+product.code;
-document.getElementById("modalPrice").textContent="السعر: "+product.price+" جنيه";
+ selectedProduct=products[index];
 
-const imageURL=new URL(product.image,location.href).href;
+ document.getElementById("modalImage").src=
+ selectedProduct.image;
 
-document.getElementById("buyButton").href=
-"terms.html?code="+encodeURIComponent(product.code)+
-"&price="+encodeURIComponent(product.price)+
-"&image="+encodeURIComponent(imageURL);
+ document.getElementById("modalCode").textContent=
+ "كود المنتج: "+selectedProduct.code;
 
-document.getElementById("modal").style.display="flex";
+ document.getElementById("modalPrice").textContent=
+ "السعر: "+selectedProduct.price+" جنيه";
+
+ document.getElementById("modal").style.display="flex";
 }
 
+// إضافة المنتج للسلة
+function addToCart(){
+
+ if(!selectedProduct) return;
+
+ let cart=getCart();
+
+ const id=location.pathname+"_"+selectedProduct.code;
+
+ const exists=cart.some(item=>item.id===id);
+
+ if(exists){
+  alert("المنتج مضاف بالفعل إلى السلة");
+  return;
+ }
+
+ cart.push({
+  id:id,
+  code:selectedProduct.code,
+  price:selectedProduct.price,
+  image:new URL(selectedProduct.image,location.href).href,
+  category:document.querySelector(".heading").textContent.trim(),
+  qty:1
+ });
+
+ localStorage.setItem(CART_KEY,JSON.stringify(cart));
+
+ updateCartCount();
+
+ alert("تمت إضافة المنتج إلى السلة");
+
+ closeProduct();
+}
+
+// إغلاق التفاصيل
 function closeProduct(){
-document.getElementById("modal").style.display="none";
+ document.getElementById("modal").style.display="none";
+ selectedProduct=null;
 }
 
 document.getElementById("modal").addEventListener("click",function(e){
-if(e.target===this)closeProduct();
+ if(e.target===this)closeProduct();
 });
+
+updateCartCount();
+window.addEventListener("pageshow",updateCartCount);
+
 </script>
 
 </body>
