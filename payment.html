@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -75,11 +76,6 @@ input:focus,select:focus,textarea:focus{
  border-color:#d6b45e;
 }
 
-input[readonly]{
- color:#d6b45e;
- background:#202020;
-}
-
 textarea{resize:vertical;min-height:90px}
 
 button,.main-btn{
@@ -149,26 +145,49 @@ button,.main-btn{
  line-height:1.8;
 }
 
-.product-image{
- width:100%;
- max-width:260px;
- max-height:320px;
- min-height:100px;
- object-fit:contain;
- display:none;
- margin:0 auto 18px;
- border:1px solid #66532e;
- border-radius:10px;
- background:#0d0d0d;
+.product-item{
+ display:flex;
+ gap:13px;
+ align-items:center;
+ padding:12px 0;
+ border-bottom:1px solid #383020;
 }
 
-.image-link{
- display:block;
+.product-item:last-child{border-bottom:0}
+
+.product-item img{
+ width:95px;
+ height:105px;
+ object-fit:contain;
+ background:#0d0d0d;
+ border:1px solid #66532e;
+ border-radius:9px;
+}
+
+.product-info{flex:1;min-width:0}
+
+.product-info strong{
  color:#d6b45e;
+ display:block;
+ margin-bottom:8px;
+}
+
+.product-info p{
+ color:#aaa;
+ font-size:13px;
+ margin:5px 0;
+}
+
+.product-info .product-price{
+ color:#e5c47d;
+ font-weight:bold;
+}
+
+.empty-cart{
  text-align:center;
- font-size:12px;
- margin-bottom:15px;
- word-break:break-all;
+ color:#aaa;
+ padding:20px;
+ line-height:2;
 }
 
 footer{
@@ -189,24 +208,16 @@ footer{
 
 <div class="container">
 
- <!-- بيانات المنتج -->
+ <!-- المنتجات -->
  <div class="card">
-  <h2>بيانات المنتج</h2>
+  <h2>منتجاتك في الطلب</h2>
 
-  <img id="productImage"
-       class="product-image"
-       alt="صورة المنتج">
+  <div id="productsList"></div>
 
-  <p id="imageError" class="small"
-     style="display:none;text-align:center">
-   صورة المنتج غير متاحة للعرض.
-  </p>
-
-  <label>كود المنتج</label>
-  <input id="productCode" readonly>
-
-  <label>سعر القطعة</label>
-  <input id="productPrice" readonly>
+  <button type="button" class="copy-btn"
+  onclick="location.href='cart.html'">
+   الرجوع إلى السلة
+  </button>
  </div>
 
  <!-- بيانات العميل -->
@@ -242,7 +253,7 @@ footer{
    placeholder="اسم الشارع ورقم المنزل وأي علامة مميزة"></textarea>
  </div>
 
- <!-- ملخص الحساب -->
+ <!-- الحساب -->
  <div class="card">
   <h2>ملخص الحساب</h2>
 
@@ -257,8 +268,8 @@ footer{
   </div>
 
   <div class="summary-row">
-   <span>سعر القطعة</span>
-   <strong id="unitPriceView">0 جنيه</strong>
+   <span>عدد المنتجات</span>
+   <strong id="countView">0 قطعة</strong>
   </div>
 
   <div class="summary-row">
@@ -272,7 +283,7 @@ footer{
   </div>
 
   <div class="summary-row total">
-   <span>الإجمالي</span>
+   <span>الإجمالي النهائي</span>
    <strong id="totalView">0 جنيه</strong>
   </div>
 
@@ -293,7 +304,7 @@ footer{
 
   <div class="notice">
    برجاء تحويل مبلغ <strong>150 جنيه</strong> على الرقم التالي:
-   <br>
+   <br><br>
 
    <strong id="paymentNumber">01043535125</strong>
 
@@ -307,17 +318,17 @@ footer{
   </div>
  </div>
 
- <!-- تأكيد الطلب -->
+ <!-- التأكيد -->
  <div class="card">
   <h2>تأكيد الطلب</h2>
 
   <p class="small">
-   راجع بياناتك والعنوان والمبلغ قبل إرسال الطلب.
-   بعد الانتقال إلى واتساب، أرفق صورة إيصال التحويل في المحادثة بنفسك.
+   راجع المنتجات وبياناتك والعنوان والمبلغ قبل إرسال الطلب.
+   بعد الانتقال إلى واتساب، أرفق صورة إيصال التحويل بنفسك.
   </p>
 
   <button type="button" onclick="sendOrder()">
-   تأكيد الطلب عبر واتساب وارسال صورة التحويل
+   تأكيد الطلب عبر واتساب
   </button>
  </div>
 
@@ -327,147 +338,173 @@ footer{
 
 <script>
 
-// أرقام التحويل وواتساب
-const paymentNumber = "01043535125";
-const whatsappNumber = "201043535125";
-
-const deposit = 150;
-const freeShippingLimit = 1500;
-
-// بيانات المنتج القادمة من صفحة المنتجات
-const params = new URLSearchParams(location.search);
-
-const code = params.get("code") || "";
-const price = Number(params.get("price"));
-const imageURL = params.get("image") || "";
-
-// عرض بيانات المنتج
-document.getElementById("productCode").value = code;
-
-document.getElementById("productPrice").value =
- Number.isFinite(price) && price > 0
- ? price + " جنيه"
- : "";
-
 // =================================
-// عرض صورة المنتج تلقائياً
+// الإعدادات
 // =================================
 
-const productImage = document.getElementById("productImage");
-const imageError = document.getElementById("imageError");
+const CART_KEY="lole_cart";
 
-const imageExtensions = ["jpg", "jpeg", "png", "webp"];
+const paymentNumber="01043535125";
+const whatsappNumber="201043535125";
 
-let imageCandidates = [];
-let currentImageIndex = 0;
+const deposit=150;
+const freeShippingLimit=1500;
 
-if(imageURL){
- imageCandidates.push(imageURL);
-}
+// =================================
+// قراءة السلة
+// =================================
 
-if(code){
- imageExtensions.forEach(ext => {
-  imageCandidates.push(code + "." + ext);
- });
-}
+function getCart(){
 
-function tryNextImage(){
+ try{
 
- if(currentImageIndex >= imageCandidates.length){
+  let cart=JSON.parse(localStorage.getItem(CART_KEY))||[];
 
-  productImage.style.display = "none";
-  imageError.style.display = "block";
+  // قطعة واحدة فقط من كل منتج
+  let unique=[];
 
-  return;
+  cart.forEach(item=>{
+
+   if(!unique.some(x=>x.id===item.id)){
+    item.qty=1;
+    unique.push(item);
+   }
+
+  });
+
+  localStorage.setItem(CART_KEY,JSON.stringify(unique));
+
+  return unique;
+
+ }catch(e){
+
+  return [];
+
  }
 
- const candidate = imageCandidates[currentImageIndex++];
-
- productImage.src = candidate;
 }
 
-productImage.onload = function(){
+// =================================
+// عرض المنتجات
+// =================================
 
- productImage.style.display = "block";
- imageError.style.display = "none";
+const cart=getCart();
 
-};
+const productsList=document.getElementById("productsList");
 
-productImage.onerror = function(){
+function renderProducts(){
 
- tryNextImage();
+ productsList.innerHTML="";
 
-};
+ if(cart.length===0){
 
-if(code || imageURL){
+  productsList.innerHTML=`
+  <div class="empty-cart">
+   السلة فارغة حالياً
+   <br>
+   ارجع للتسوق وأضف منتجاتك أولاً.
+  </div>`;
 
- imageError.style.display = "none";
- productImage.style.display = "block";
+  return;
 
- tryNextImage();
+ }
 
-}else{
+ cart.forEach(item=>{
 
- productImage.style.display = "none";
- imageError.style.display = "block";
+  const product=document.createElement("div");
+  product.className="product-item";
+
+  const img=document.createElement("img");
+  img.src=item.image||"";
+  img.alt="صورة المنتج";
+
+  img.onerror=function(){
+   this.style.display="none";
+  };
+
+  const info=document.createElement("div");
+  info.className="product-info";
+
+  const code=document.createElement("strong");
+  code.textContent="كود المنتج: "+item.code;
+
+  const category=document.createElement("p");
+  category.textContent=item.category||"منتج LOLE";
+
+  const price=document.createElement("p");
+  price.className="product-price";
+  price.textContent=Number(item.price)+" جنيه";
+
+  const quantity=document.createElement("p");
+  quantity.textContent="الكمية: قطعة واحدة";
+
+  info.append(code,category,price,quantity);
+
+  product.append(img,info);
+
+  productsList.appendChild(product);
+
+ });
 
 }
+
+renderProducts();
 
 // =================================
 // المحافظات والمراكز
 // =================================
 
-const areas = {
+const areas={
 
- "القاهرة":["القاهرة","مدينة نصر","مصر الجديدة","المعادي","حلوان","شبرا","عين شمس","التجمع","المرج","المطرية"],
+"القاهرة":["القاهرة","مدينة نصر","مصر الجديدة","المعادي","حلوان","شبرا","عين شمس","التجمع","المرج","المطرية"],
 
- "الجيزة":["الجيزة","6 أكتوبر","الشيخ زايد","الدقي","المهندسين","العجوزة","فيصل","الهرم","البدرشين","أوسيم"],
+"الجيزة":["الجيزة","6 أكتوبر","الشيخ زايد","الدقي","المهندسين","العجوزة","فيصل","الهرم","البدرشين","أوسيم"],
 
- "الإسكندرية":["الإسكندرية","برج العرب","العجمي","المنتزه","العامرية","محرم بك"],
+"الإسكندرية":["الإسكندرية","برج العرب","العجمي","المنتزه","العامرية","محرم بك"],
 
- "الدقهلية":["المنصورة","طلخا","ميت غمر","أجا","السنبلاوين","دكرنس","منية النصر","بلقاس","شربين","نبروه","تمي الأمديد","الجمالية","المطرية","المنزلة","بني عبيد","ميت سلسيل","الكردي","جمصة"],
+"الدقهلية":["المنصورة","طلخا","ميت غمر","أجا","السنبلاوين","دكرنس","منية النصر","بلقاس","شربين","نبروه","تمي الأمديد","الجمالية","المطرية","المنزلة","بني عبيد","ميت سلسيل","الكردي","جمصة"],
 
- "الشرقية":["الزقازيق","العاشر من رمضان","بلبيس","منيا القمح","أبو حماد","فاقوس","أبو كبير","ههيا","ديرب نجم","الإبراهيمية","الحسينية","كفر صقر","أولاد صقر"],
+"الشرقية":["الزقازيق","العاشر من رمضان","بلبيس","منيا القمح","أبو حماد","فاقوس","أبو كبير","ههيا","ديرب نجم","الإبراهيمية","الحسينية","كفر صقر","أولاد صقر"],
 
- "الغربية":["طنطا","المحلة الكبرى","كفر الزيات","زفتى","السنطة","بسيون","قطور","سمنود"],
+"الغربية":["طنطا","المحلة الكبرى","كفر الزيات","زفتى","السنطة","بسيون","قطور","سمنود"],
 
- "القليوبية":["بنها","شبرا الخيمة","قليوب","القناطر الخيرية","الخانكة","الخصوص","العبور","كفر شكر","طوخ","شبين القناطر"],
+"القليوبية":["بنها","شبرا الخيمة","قليوب","القناطر الخيرية","الخانكة","الخصوص","العبور","كفر شكر","طوخ","شبين القناطر"],
 
- "المنوفية":["شبين الكوم","منوف","أشمون","قويسنا","تلا","الباجور","بركة السبع","السادات","سرس الليان","الشهداء"],
+"المنوفية":["شبين الكوم","منوف","أشمون","قويسنا","تلا","الباجور","بركة السبع","السادات","سرس الليان","الشهداء"],
 
- "البحيرة":["دمنهور","كفر الدوار","رشيد","إدكو","أبو حمص","أبو المطامير","الدلنجات","إيتاي البارود","شبراخيت","حوش عيسى","كوم حمادة","النوبارية"],
+"البحيرة":["دمنهور","كفر الدوار","رشيد","إدكو","أبو حمص","أبو المطامير","الدلنجات","إيتاي البارود","شبراخيت","حوش عيسى","كوم حمادة","النوبارية"],
 
- "كفر الشيخ":["كفر الشيخ","دسوق","فوه","مطوبس","بلطيم","الحامول","بيلا","سيدي سالم","قلين","الرياض"],
+"كفر الشيخ":["كفر الشيخ","دسوق","فوه","مطوبس","بلطيم","الحامول","بيلا","سيدي سالم","قلين","الرياض"],
 
- "دمياط":["دمياط","دمياط الجديدة","فارسكور","الزرقا","كفر سعد","رأس البر"],
+"دمياط":["دمياط","دمياط الجديدة","فارسكور","الزرقا","كفر سعد","رأس البر"],
 
- "بورسعيد":["بورسعيد","بورفؤاد"],
+"بورسعيد":["بورسعيد","بورفؤاد"],
 
- "الإسماعيلية":["الإسماعيلية","فايد","القنطرة شرق","القنطرة غرب","التل الكبير","أبو صوير"],
+"الإسماعيلية":["الإسماعيلية","فايد","القنطرة شرق","القنطرة غرب","التل الكبير","أبو صوير"],
 
- "السويس":["السويس","الأربعين","عتاقة","الجناين"],
+"السويس":["السويس","الأربعين","عتاقة","الجناين"],
 
- "الفيوم":["الفيوم","سنورس","إطسا","طامية","أبشواي","يوسف الصديق"],
+"الفيوم":["الفيوم","سنورس","إطسا","طامية","أبشواي","يوسف الصديق"],
 
- "بني سويف":["بني سويف","الواسطى","ناصر","إهناسيا","ببا","سمسطا","الفشن"],
+"بني سويف":["بني سويف","الواسطى","ناصر","إهناسيا","ببا","سمسطا","الفشن"],
 
- "المنيا":["المنيا","ملوي","مغاغة","بني مزار","أبو قرقاص","سمالوط","مطاي","دير مواس","العدوة"],
+"المنيا":["المنيا","ملوي","مغاغة","بني مزار","أبو قرقاص","سمالوط","مطاي","دير مواس","العدوة"],
 
- "أسيوط":["أسيوط","ديروط","منفلوط","القوصية","أبنوب","الفتح","أبو تيج","الغنايم","ساحل سليم","البداري"],
+"أسيوط":["أسيوط","ديروط","منفلوط","القوصية","أبنوب","الفتح","أبو تيج","الغنايم","ساحل سليم","البداري"],
 
- "سوهاج":["سوهاج","أخميم","جرجا","طهطا","المراغة","البلينا","المنشأة","دار السلام","ساقلتة"],
+"سوهاج":["سوهاج","أخميم","جرجا","طهطا","المراغة","البلينا","المنشأة","دار السلام","ساقلتة"],
 
- "قنا":["قنا","نجع حمادي","دشنا","قفط","قوص","أبو تشت","فرشوط","نقادة"],
+"قنا":["قنا","نجع حمادي","دشنا","قفط","قوص","أبو تشت","فرشوط","نقادة"],
 
- "الأقصر":["الأقصر","إسنا","أرمنت","القرنة","البياضية","الزينية"],
+"الأقصر":["الأقصر","إسنا","أرمنت","القرنة","البياضية","الزينية"],
 
- "أسوان":["أسوان","كوم أمبو","إدفو","دراو","نصر النوبة"],
+"أسوان":["أسوان","كوم أمبو","إدفو","دراو","نصر النوبة"],
 
- "البحر الأحمر":["الغردقة","رأس غارب","سفاجا","القصير","مرسى علم"],
+"البحر الأحمر":["الغردقة","رأس غارب","سفاجا","القصير","مرسى علم"],
 
- "الوادي الجديد":["الخارجة","الداخلة","الفرافرة","باريس","بلاط"],
+"الوادي الجديد":["الخارجة","الداخلة","الفرافرة","باريس","بلاط"],
 
- "مطروح":["مرسى مطروح","الحمام","العلمين","الضبعة","سيوة","النجيلة","سيدي براني"]
+"مطروح":["مرسى مطروح","الحمام","العلمين","الضبعة","سيوة","النجيلة","سيدي براني"]
 
 };
 
@@ -475,125 +512,147 @@ const areas = {
 // أسعار الشحن
 // =================================
 
-const shipping = {
+const shipping={
 
- "القاهرة":95,
- "الجيزة":95,
- "الإسكندرية":95,
- "الدقهلية":70,
- "الشرقية":85,
- "الغربية":85,
- "القليوبية":85,
- "المنوفية":85,
- "البحيرة":95,
- "كفر الشيخ":85,
- "دمياط":85,
- "بورسعيد":95,
- "الإسماعيلية":95,
- "السويس":95,
- "الفيوم":130,
- "بني سويف":130,
- "المنيا":130,
- "أسيوط":140,
- "سوهاج":130,
- "قنا":130,
- "الأقصر":140,
- "أسوان":140,
- "البحر الأحمر":160,
- "الوادي الجديد":0,
- "مطروح":150
+"القاهرة":95,
+"الجيزة":95,
+"الإسكندرية":95,
+"الدقهلية":70,
+"الشرقية":85,
+"الغربية":85,
+"القليوبية":85,
+"المنوفية":85,
+"البحيرة":95,
+"كفر الشيخ":85,
+"دمياط":85,
+"بورسعيد":95,
+"الإسماعيلية":95,
+"السويس":95,
+"الفيوم":130,
+"بني سويف":130,
+"المنيا":130,
+"أسيوط":140,
+"سوهاج":130,
+"قنا":130,
+"الأقصر":140,
+"أسوان":140,
+"البحر الأحمر":160,
+"الوادي الجديد":0,
+"مطروح":150
 
 };
 
+// =================================
 // تعبئة المحافظات
-const governorate = document.getElementById("governorate");
-const center = document.getElementById("center");
+// =================================
+
+const governorate=document.getElementById("governorate");
+const center=document.getElementById("center");
 
 Object.keys(areas).forEach(name=>{
 
- const option = document.createElement("option");
+ const option=document.createElement("option");
 
- option.value = name;
- option.textContent = name;
+ option.value=name;
+ option.textContent=name;
 
  governorate.appendChild(option);
 
 });
 
+// =================================
 // تغيير المحافظة
+// =================================
+
 governorate.addEventListener("change",()=>{
 
- center.innerHTML = '<option value="">اختر المركز / المدينة</option>';
+ center.innerHTML='<option value="">اختر المركز / المدينة</option>';
 
- const selected = governorate.value;
+ const selected=governorate.value;
 
  if(!selected){
 
-  center.disabled = true;
-
+  center.disabled=true;
   updateTotals();
 
   return;
+
  }
 
  areas[selected].forEach(name=>{
 
-  const option = document.createElement("option");
+  const option=document.createElement("option");
 
-  option.value = name;
-  option.textContent = name;
+  option.value=name;
+  option.textContent=name;
 
   center.appendChild(option);
 
  });
 
- center.disabled = false;
+ center.disabled=false;
 
  updateTotals();
 
 });
 
 // =================================
-// حساب الإجمالي لقطعة واحدة
+// حساب الإجمالي
 // =================================
+
+function getProductTotal(){
+
+ return cart.reduce((sum,item)=>{
+
+  return sum+Number(item.price);
+
+ },0);
+
+}
+
+function getShipping(){
+
+ const productTotal=getProductTotal();
+
+ if(productTotal>=freeShippingLimit){
+  return 0;
+ }
+
+ return governorate.value
+ ? Number(shipping[governorate.value]||0)
+ : 0;
+
+}
 
 function updateTotals(){
 
- const selected = governorate.value;
+ const productTotal=getProductTotal();
 
- const unitPrice =
- Number.isFinite(price) && price > 0 ? price : 0;
+ const shippingCost=getShipping();
 
- const productTotal = unitPrice;
+ const total=productTotal+shippingCost;
 
- const isFreeShipping =
- productTotal >= freeShippingLimit;
+ const remaining=Math.max(0,total-deposit);
 
- const shippingCost = isFreeShipping
- ? 0
- : (selected ? Number(shipping[selected]||0) : 0);
+ document.getElementById("countView").textContent=
+ cart.length+" قطعة";
 
- const total = productTotal + shippingCost;
+ document.getElementById("priceView").textContent=
+ productTotal+" جنيه";
 
- const remaining = Math.max(0,total-deposit);
+ document.getElementById("shippingView").textContent=
+ productTotal>=freeShippingLimit
+ ? "مجاني"
+ : shippingCost+" جنيه";
 
- document.getElementById("unitPriceView").textContent =
- unitPrice + " جنيه";
+ document.getElementById("totalView").textContent=
+ total+" جنيه";
 
- document.getElementById("priceView").textContent =
- productTotal + " جنيه";
+ document.getElementById("remainingView").textContent=
+ remaining+" جنيه";
 
- document.getElementById("shippingView").textContent =
- isFreeShipping ? "مجاني" : shippingCost + " جنيه";
-
- document.getElementById("totalView").textContent =
- total + " جنيه";
-
- document.getElementById("remainingView").textContent =
- remaining + " جنيه";
-
- document.getElementById("freeShippingMessage").style.display =
- isFreeShipping ? "block" : "none";
+ document.getElementById("freeShippingMessage").style.display=
+ productTotal>=freeShippingLimit?"block":"none";
 
 }
 
@@ -603,138 +662,185 @@ function updateTotals(){
 
 function copyNumber(){
 
- const note =
- "احتفظ بصورة إيصال التحويل لإرفاقها وإرسالها عبر واتساب بعد إتمام بيانات الطلب.";
+ const note=
+ "احتفظ بصورة إيصال التحويل لإرفاقها وإرسالها عبر واتساب.";
 
  function copied(){
 
-  alert("تم نسخ رقم التحويل بنجاح\n\n" + note);
+  alert("تم نسخ رقم التحويل بنجاح\n\n"+note);
 
  }
 
- if(navigator.clipboard && navigator.clipboard.writeText){
+ if(navigator.clipboard&&navigator.clipboard.writeText){
 
   navigator.clipboard.writeText(paymentNumber)
-   .then(copied)
-   .catch(()=>{
+  .then(copied)
+  .catch(()=>{
 
-    alert("رقم التحويل: " + paymentNumber + "\n\n" + note);
+   alert("رقم التحويل: "+paymentNumber+"\n\n"+note);
 
-   });
+  });
 
  }else{
 
-  alert("رقم التحويل: " + paymentNumber + "\n\n" + note);
+  alert("رقم التحويل: "+paymentNumber+"\n\n"+note);
 
  }
 
 }
 
 // =================================
-// إرسال الطلب عبر واتساب 
+// إرسال الطلب عبر واتساب
 // =================================
 
 function sendOrder(){
 
- const name =
- document.getElementById("customerName").value.trim();
+ const name=document.getElementById("customerName").value.trim();
 
- const phone =
- document.getElementById("phone").value.trim();
+ const phone=document.getElementById("phone").value.trim();
 
- const phone2 =
- document.getElementById("phone2").value.trim();
+ const phone2=document.getElementById("phone2").value.trim();
 
- const address =
- document.getElementById("address").value.trim();
+ const address=document.getElementById("address").value.trim();
 
- const gov = governorate.value;
- const city = center.value;
+ const gov=governorate.value;
 
- const unitPrice = Number(price);
+ const city=center.value;
 
- const productPrice = unitPrice;
+ // التأكد من السلة
+ const currentCart=getCart();
 
- // التأكد من بيانات المنتج
- if(!code || !Number.isFinite(unitPrice) || unitPrice<=0){
+ if(currentCart.length===0){
 
-  alert("بيانات المنتج غير صحيحة. ارجع للمنتج واختره مرة أخرى.");
+  alert("السلة فارغة! أضف منتجات أولاً.");
 
   return;
+
  }
 
- // التأكد من بيانات العميل
- if(!name || !phone || !address || !gov || !city){
+ // التحقق من الأسعار
+ for(const item of currentCart){
+
+  if(!item.code||!Number.isFinite(Number(item.price))||Number(item.price)<=0){
+
+   alert("يوجد منتج سعره غير صحيح. ارجع للسلة وراجع المنتجات.");
+
+   return;
+
+  }
+
+ }
+
+ // بيانات العميل
+ if(!name||!phone||!address||!gov||!city){
 
   alert("من فضلك أكمل جميع بيانات العميل والعنوان.");
 
   return;
+
  }
 
- // التحقق من أرقام الموبايل
- const egyptPhone = /^01[0125][0-9]{8}$/;
+ // أرقام الموبايل
+ const egyptPhone=/^01[0125][0-9]{8}$/;
 
  if(!egyptPhone.test(phone)){
 
   alert("رقم الموبايل غير صحيح. اكتب رقم مصري مكون من 11 رقم.");
 
   return;
+
  }
 
- if(phone2 && !egyptPhone.test(phone2)){
+ if(phone2&&!egyptPhone.test(phone2)){
 
   alert("رقم الموبايل البديل غير صحيح.");
 
   return;
+
  }
 
- // حساب الشحن والإجمالي
- const isFreeShipping = productPrice >= freeShippingLimit;
+ // الحساب
+ const productTotal=currentCart.reduce(
+  (sum,item)=>sum+Number(item.price),0
+ );
 
- const shippingCost = isFreeShipping
- ? 0
- : Number(shipping[gov]||0);
+ const isFreeShipping=productTotal>=freeShippingLimit;
 
- const total = productPrice + shippingCost;
+ const shippingCost=isFreeShipping
+ ?0
+ :Number(shipping[gov]||0);
 
- const remaining = Math.max(0,total-deposit);
+ const total=productTotal+shippingCost;
 
- // رسالة الطلب
- const message =
+ const remaining=Math.max(0,total-deposit);
+
+ // تفاصيل المنتجات
+ const productsText=currentCart.map((item,index)=>{
+
+  return `
+${index+1}- كود المنتج: ${item.code}
+القسم: ${item.category||"LOLE"}
+سعر القطعة: ${item.price} جنيه
+الكمية: قطعة واحدة
+رابط الصورة: ${item.image||"غير متاح"}`;
+
+ }).join("\n");
+
+ // رسالة واتساب
+ const message=
 `طلب جديد من LOLE FASHION BRANDS
 
-كود المنتج: ${code}
-رابط صورة المنتج: ${imageURL || "صورة محلية باسم كود المنتج"}
-سعر القطعة: ${unitPrice} جنيه
-إجمالي المنتجات: ${productPrice} جنيه
+====================
+تفاصيل المنتجات
+====================
+
+${productsText}
+
+====================
+ملخص الحساب
+====================
+
+عدد المنتجات: ${currentCart.length} قطعة
+إجمالي المنتجات: ${productTotal} جنيه
 
 المحافظة: ${gov}
 المركز / المدينة: ${city}
-الشحن: ${isFreeShipping ? "مجاني" : shippingCost+" جنيه"}
 
-الإجمالي: ${total} جنيه
+الشحن: ${isFreeShipping?"مجاني":shippingCost+" جنيه"}
+
+الإجمالي النهائي: ${total} جنيه
+
 العربون المطلوب: ${deposit} جنيه
 المتبقي عند الاستلام: ${remaining} جنيه
 
+====================
+بيانات العميل
+====================
+
 اسم العميل: ${name}
 رقم الموبايل: ${phone}
-رقم بديل: ${phone2 || "غير متوفر"}
+رقم بديل: ${phone2||"غير متوفر"}
 
-العنوان بالتفصيل: ${address}
+العنوان بالتفصيل:
+${address}
 
 رقم التحويل: ${paymentNumber}
 
-ملاحظة: يرجى إرفاق صورة إيصال تحويل العربون في هذه المحادثة لإتمام تأكيد الطلب.`;
+ملاحظة:
+يرجى إرفاق صورة إيصال تحويل العربون في هذه المحادثة لتأكيد الطلب.`;
 
- const whatsappURL =
- "https://wa.me/" + whatsappNumber +
- "?text=" + encodeURIComponent(message);
+ const whatsappURL=
+ "https://wa.me/"+whatsappNumber+
+ "?text="+encodeURIComponent(message);
 
  window.open(whatsappURL,"_blank");
 
 }
 
-// تحديث الحساب عند فتح الصفحة
+// =================================
+// تشغيل الحساب
+// =================================
+
 updateTotals();
 
 </script>
