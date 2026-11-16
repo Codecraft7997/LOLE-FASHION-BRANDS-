@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -35,14 +36,41 @@ header p{
  margin:10px 0 0;
 }
 
-.back{
+.header-actions{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ flex-wrap:wrap;
+}
+
+.back,.cart-link{
  display:inline-block;
- margin:18px;
- padding:10px 20px;
+ margin:18px 8px;
+ padding:10px 18px;
  color:#e8d18c;
  border:1px solid #b89545;
  border-radius:8px;
  text-decoration:none;
+}
+
+.cart-link{
+ background:#c6a451;
+ color:#111;
+ font-weight:bold;
+}
+
+.cart-count{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ background:#111;
+ color:#e8d18c;
+ border-radius:50%;
+ min-width:23px;
+ height:23px;
+ margin-right:5px;
+ font-size:12px;
 }
 
 .container{
@@ -198,7 +226,14 @@ footer{
  <p>TOP COLLECTION</p>
 </header>
 
-<a class="back" href="index.html">← رجوع للرئيسية</a>
+<div class="header-actions">
+ <a class="back" href="index.html">← رجوع للرئيسية</a>
+
+ <a class="cart-link" href="cart.html">
+  🛒 السلة
+  <span class="cart-count" id="cartCount">0</span>
+ </a>
+</div>
 
 <div class="container">
  <h2 class="heading">توب حريمي</h2>
@@ -214,9 +249,9 @@ footer{
   <p id="modalCode"></p>
   <p id="modalPrice"></p>
 
-  <a class="buy" id="buyButton" href="#">
-   اذهب للشراء
-  </a>
+  <button class="buy" id="addButton" onclick="addToCart()">
+   + إضافة إلى السلة
+  </button>
 
   <button class="close" onclick="closeProduct()">
    إغلاق
@@ -231,11 +266,24 @@ footer{
 
 <script>
 
-// عدّل كل منتج لوحده من هنا
-// code = كود المنتج
-// price = السعر
-// image = اسم الصورة
+const CART_KEY="lole_cart";
 
+function getCart(){
+ try{
+  return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+ }catch(e){
+  return [];
+ }
+}
+
+function updateCartCount(){
+ const cart=getCart();
+ document.getElementById("cartCount").textContent=cart.length;
+}
+
+let selectedProduct=null;
+
+// المنتجات
 const products = [
 
  {code:"١a",price:600,image:"١a.jpg"},
@@ -338,31 +386,59 @@ products.forEach((product,index)=>{
 // فتح تفاصيل المنتج
 function openProduct(index){
 
- const product=products[index];
+ selectedProduct=products[index];
 
  const modalImage=document.getElementById("modalImage");
 
- modalImage.src=product.image;
+ modalImage.src=selectedProduct.image;
 
  document.getElementById("modalCode").textContent=
- "كود المنتج: "+product.code;
+ "كود المنتج: "+selectedProduct.code;
 
  document.getElementById("modalPrice").textContent=
- "السعر: "+product.price+" جنيه";
-
- const imageURL=new URL(product.image,location.href).href;
-
- document.getElementById("buyButton").href=
- "terms.html?code="+encodeURIComponent(product.code)+
- "&price="+encodeURIComponent(product.price)+
- "&image="+encodeURIComponent(imageURL);
+ "السعر: "+selectedProduct.price+" جنيه";
 
  document.getElementById("modal").style.display="flex";
+}
+
+// إضافة المنتج للسلة
+function addToCart(){
+
+ if(!selectedProduct) return;
+
+ let cart=getCart();
+
+ const id=location.pathname+"_"+selectedProduct.code;
+
+ const exists=cart.some(item=>item.id===id);
+
+ if(exists){
+  alert("المنتج مضاف بالفعل إلى السلة");
+  return;
+ }
+
+ cart.push({
+  id:id,
+  code:selectedProduct.code,
+  price:selectedProduct.price,
+  image:new URL(selectedProduct.image,location.href).href,
+  category:document.querySelector(".heading").textContent.trim(),
+  qty:1
+ });
+
+ localStorage.setItem(CART_KEY,JSON.stringify(cart));
+
+ updateCartCount();
+
+ alert("تمت إضافة المنتج إلى السلة");
+
+ closeProduct();
 }
 
 // إغلاق النافذة
 function closeProduct(){
  document.getElementById("modal").style.display="none";
+ selectedProduct=null;
 }
 
 document.getElementById("modal").addEventListener("click",function(e){
@@ -370,6 +446,9 @@ document.getElementById("modal").addEventListener("click",function(e){
   closeProduct();
  }
 });
+
+updateCartCount();
+window.addEventListener("pageshow",updateCartCount);
 
 </script>
 
