@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+
+<title>حريمي جديد | LOLE FASHION BRANDS</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*{
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
+}
+
+body{
+ background:#080808;
+ color:white;
+ font-family:'Cairo',sans-serif;
+}
+
+header{
+ padding:20px 6%;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ border-bottom:1px solid #493a26;
+}
+
+.logo{
+ color:#d9b66b;
+ font-size:20px;
+ font-weight:900;
+}
+
+.back{
+ color:#e5c47d;
+ text-decoration:none;
+ font-size:13px;
+}
+
+.container{
+ max-width:1100px;
+ margin:auto;
+ padding:40px 20px;
+}
+
+.heading{
+ text-align:center;
+ margin-bottom:35px;
+}
+
+.heading h1{
+ color:#e5c47d;
+ font-size:30px;
+ font-weight:900;
+}
+
+.heading p{
+ color:#888;
+ font-size:13px;
+ margin-top:8px;
+}
+
+.products{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:22px;
+}
+
+.product{
+ background:linear-gradient(145deg,#201a11,#100e0b);
+ border:1px solid #55432b;
+ border-radius:18px;
+ overflow:hidden;
+ transition:.3s;
+}
+
+.product:hover{
+ transform:translateY(-6px);
+ border-color:#d9b66b;
+ box-shadow:0 10px 30px #d9b66b15;
+}
+
+.product-image{
+ height:230px;
+ width:100%;
+ overflow:hidden;
+ background:#15120e;
+}
+
+.product-image img{
+ width:100%;
+ height:100%;
+ display:block;
+ object-fit:cover;
+ transition:.4s;
+}
+
+.product:hover .product-image img{
+ transform:scale(1.06);
+}
+
+.product-info{
+ padding:20px;
+ text-align:center;
+}
+
+.product-info h2{
+ color:#e5c47d;
+ font-size:21px;
+ margin-bottom:8px;
+}
+
+.product-info p{
+ color:#999;
+ font-size:12px;
+ margin-bottom:18px;
+}
+
+.product-info a{
+ display:block;
+ text-decoration:none;
+ color:#111;
+ background:linear-gradient(120deg,#a77c35,#f1d69b);
+ padding:12px;
+ border-radius:9px;
+ font-weight:900;
+ font-size:14px;
+}
+
+footer{
+ text-align:center;
+ padding:25px;
+ margin-top:35px;
+ border-top:1px solid #292218;
+ color:#777;
+ font-size:12px;
+}
+
+@media(max-width:700px){
+ .products{
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+ }
+
+ .product-image{
+  height:170px;
+ }
+
+ .product-info{
+  padding:14px 10px;
+ }
+
+ .product-info h2{
+  font-size:18px;
+ }
+
+ .logo{
+  font-size:15px;
+ }
+}
+
+@media(max-width:380px){
+ .products{
+  grid-template-columns:1fr;
+ }
+
+ .product-image{
+  height:220px;
+ }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+ <div class="logo">
+  LOLE FASHION BRANDS
+ </div>
+
+ <a href="new.html" class="back">
+  ← رجوع
+ </a>
+
+</header>
+
+<main class="container">
+
+ <div class="heading">
+  <h1>WOMEN COLLECTION</h1>
+  <p>اختاري القطعة اللي تعجبك وشوفي مجموعتنا</p>
+ </div>
+
+ <div class="products">
+
+  <!-- بلوفر -->
+
+  <div class="product">
+
+   <div class="product-image">
+    <img src="bbb.jpg" alt="مجموعة بلوفرات شتوية" loading="lazy">
+   </div>
+
+   <div class="product-info">
+    <h2>بلوفر</h2>
+    <p>مجموعة البلوفرات الجديدة</p>
+    <a href="sweater.html">عرض المنتجات ←</a>
+   </div>
+
+  </div>
+
+  <!-- جاكيت -->
+
+  <div class="product">
+
+   <div class="product-image">
+    <img src="jjj.jpg" alt="جاكيت حريمي" loading="lazy">
+   </div>
+
+   <div class="product-info">
+    <h2>جاكيت</h2>
+    <p>اكتشفي أحدث الجواكت</p>
+    <a href="jacket.html">عرض المنتجات ←</a>
+   </div>
+
+  </div>
+
+  <!-- كارديجان -->
+
+  <div class="product">
+
+   <div class="product-image">
+    <img src="kkk.jpg" alt="كارديجان حريمي" loading="lazy">
+   </div>
+
+   <div class="product-info">
+    <h2>كارديجان</h2>
+    <p>اختاري الكارديجان المفضل</p>
+    <a href="cardigan.html">عرض المنتجات ←</a>
+   </div>
+
+  </div>
+
+  <!-- توب -->
+
+  <div class="product">
+
+   <div class="product-image">
+    <img src="ttt.jpg" alt="توب حريمي" loading="lazy">
+   </div>
+
+   <div class="product-info">
+    <h2>توب</h2>
+    <p>اكتشفي مجموعة التوب</p>
+    <a href="top.html">عرض المنتجات ←</a>
+   </div>
+
+  </div>
+
+ </div>
+
+</main>
+
+<footer>
+ LOLE FASHION BRANDS © 2026
+ <br>
+ Elegance In Every Detail ♡
+</footer>
+
+</body>
+</html>

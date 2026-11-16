@@ -1,0 +1,389 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+
+<title>الجديد | LOLE FASHION BRANDS</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#080808;
+    color:white;
+    font-family:'Cairo',sans-serif;
+}
+
+/* HEADER */
+
+header{
+    padding:20px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#0d0d0d;
+    border-bottom:1px solid #493a26;
+}
+
+.logo{
+    color:#d9b66b;
+    font-size:20px;
+    font-weight:900;
+    letter-spacing:1px;
+}
+
+.back{
+    color:#e5c47d;
+    text-decoration:none;
+    font-size:13px;
+    border:1px solid #55432b;
+    padding:9px 16px;
+    transition:.3s;
+}
+
+.back:hover{
+    background:#d9b66b;
+    color:#080808;
+}
+
+/* HERO */
+
+.hero{
+    background:linear-gradient(145deg,#1c1811,#080808);
+    text-align:center;
+    padding:65px 20px;
+    border-bottom:1px solid #493a26;
+}
+
+.hero-label{
+    color:#a88a4e;
+    font-family:'Playfair Display',serif;
+    font-size:11px;
+    letter-spacing:6px;
+    direction:ltr;
+}
+
+.hero h1{
+    color:#e5c47d;
+    font-family:'Playfair Display',serif;
+    font-size:85px;
+    font-weight:600;
+    letter-spacing:14px;
+    direction:ltr;
+    margin:8px 0;
+}
+
+.hero-line{
+    width:48px;
+    height:2px;
+    background:#d9b66b;
+    margin:12px auto 0;
+}
+
+/* MAIN */
+
+.container{
+    max-width:1000px;
+    margin:auto;
+    padding:55px 20px 70px;
+}
+
+/* HEADING */
+
+.heading{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.heading span{
+    color:#a88a4e;
+    font-family:'Playfair Display',serif;
+    font-size:10px;
+    letter-spacing:5px;
+    direction:ltr;
+}
+
+.heading h2{
+    color:#e5c47d;
+    font-size:27px;
+    font-weight:900;
+    margin-top:8px;
+}
+
+/* CATEGORY */
+
+.categories{
+    display:grid;
+    grid-template-columns:minmax(0,430px);
+    justify-content:center;
+}
+
+.category{
+    background:linear-gradient(145deg,#201a11,#100e0b);
+    border:1px solid #55432b;
+    border-radius:18px;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.category:hover{
+    transform:translateY(-5px);
+    border-color:#d9b66b;
+    box-shadow:0 10px 30px #d9b66b15;
+}
+
+.category-image{
+    width:100%;
+    height:430px;
+    overflow:hidden;
+    background:#15120e;
+}
+
+.category-image img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+    object-position:center;
+    transition:.5s;
+}
+
+.category:hover .category-image img{
+    transform:scale(1.05);
+}
+
+.category-info{
+    padding:20px;
+    text-align:center;
+}
+
+.category-info h2{
+    color:#e5c47d;
+    font-size:25px;
+    margin-bottom:4px;
+}
+
+.category-en{
+    color:#a88a4e;
+    font-family:'Playfair Display',serif;
+    font-size:10px;
+    letter-spacing:3px;
+    direction:ltr;
+    margin-bottom:17px;
+}
+
+.category-info a{
+    display:block;
+    text-decoration:none;
+    color:#111;
+    background:linear-gradient(120deg,#a77c35,#f1d69b);
+    padding:13px;
+    border-radius:9px;
+    font-weight:900;
+    font-size:14px;
+    transition:.3s;
+}
+
+.category-info a:hover{
+    filter:brightness(1.1);
+}
+
+/* BRAND */
+
+.brand-message{
+    background:#100e0b;
+    border-top:1px solid #292218;
+    border-bottom:1px solid #292218;
+    text-align:center;
+    padding:35px 15px;
+}
+
+.brand-message h2{
+    color:#d9b66b;
+    font-family:'Playfair Display',serif;
+    font-size:20px;
+    letter-spacing:4px;
+    direction:ltr;
+}
+
+/* FOOTER */
+
+footer{
+    text-align:center;
+    padding:30px 15px;
+    color:#777;
+    font-size:11px;
+}
+
+.footer-name{
+    color:#d9b66b;
+    font-family:'Playfair Display',serif;
+    font-size:25px;
+    letter-spacing:5px;
+    direction:ltr;
+}
+
+.footer-sub{
+    color:#a88a4e;
+    font-family:'Playfair Display',serif;
+    font-size:9px;
+    letter-spacing:4px;
+    margin-top:4px;
+    direction:ltr;
+}
+
+.footer-line{
+    width:40px;
+    height:1px;
+    background:#55432b;
+    margin:17px auto;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    header{
+        padding:15px 16px;
+    }
+
+    .logo{
+        font-size:15px;
+    }
+
+    .back{
+        font-size:11px;
+        padding:8px 12px;
+    }
+
+    .hero{
+        padding:55px 15px;
+    }
+
+    .hero h1{
+        font-size:67px;
+        letter-spacing:10px;
+    }
+
+    .container{
+        padding:45px 16px 55px;
+    }
+
+    .heading h2{
+        font-size:23px;
+    }
+
+    .category-image{
+        height:370px;
+    }
+
+    .category-info{
+        padding:17px;
+    }
+
+    .category-info h2{
+        font-size:22px;
+    }
+
+    .brand-message h2{
+        font-size:17px;
+        letter-spacing:2px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        LOLE FASHION BRANDS
+    </div>
+
+    <a href="index.html" class="back">
+        ← الرئيسية
+    </a>
+
+</header>
+
+<section class="hero">
+
+    <div class="hero-label">
+        LOLE FASHION BRANDS
+    </div>
+
+    <h1>NEW</h1>
+
+    <div class="hero-line"></div>
+
+</section>
+
+<main class="container">
+
+    <div class="heading">
+        <span>NEW COLLECTION</span>
+        <h2>الجديد</h2>
+    </div>
+
+    <div class="categories">
+
+        <div class="category">
+
+            <div class="category-image">
+                <img
+                    src="nnn.jpg"
+                    alt="Women's Fashion"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="category-info">
+
+                <h2>حريمي</h2>
+
+                <div class="category-en">
+                    WOMEN COLLECTION
+                </div>
+
+                <a href="new-women.html">
+                    تسوقي الآن ←
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<section class="brand-message">
+    <h2>LOLE FASHION BRANDS</h2>
+</section>
+
+<footer>
+
+    <div class="footer-name">LOLE</div>
+
+    <div class="footer-sub">
+        FASHION BRANDS
+    </div>
+
+    <div class="footer-line"></div>
+
+    LOLE FASHION BRANDS © 2026
+
+</footer>
+
+</body>
+</html>

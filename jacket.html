@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+<title>LOLE | جاكيت حريمي</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090909;color:#f5e6bd;font-family:Tahoma,Arial,sans-serif}
+header{background:#111;border-bottom:1px solid #b89545;padding:22px 12px;text-align:center}
+header h1{margin:0;color:#d6b45e;letter-spacing:2px;font-size:25px}
+header p{color:#ddd;margin:10px 0 0}
+.back{display:inline-block;margin:18px;padding:10px 20px;color:#e8d18c;border:1px solid #b89545;border-radius:8px;text-decoration:none}
+.container{padding:10px 15px 35px}
+.heading{text-align:center;color:#d6b45e;font-size:23px;margin:15px 0 25px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:13px;max-width:1100px;margin:auto}
+.product{background:#151515;border:1px solid #6e572b;border-radius:12px;overflow:hidden;cursor:pointer;transition:.2s}
+.product:active{transform:scale(.97)}
+.product img{width:100%;height:190px;object-fit:cover;display:block;background:#222}
+.info{padding:12px;text-align:center}
+.code{font-size:14px;color:#e3c777}
+.price{font-size:16px;color:white;margin-top:8px}
+.placeholder{height:190px;display:flex;align-items:center;justify-content:center;color:#c6a85c;font-size:25px;background:linear-gradient(145deg,#222,#090909)}
+.modal{display:none;position:fixed;inset:0;background:#000e;z-index:10;align-items:center;justify-content:center;padding:15px}
+.modal-box{background:#151515;border:1px solid #c3a451;border-radius:15px;padding:17px;width:100%;max-width:390px;text-align:center;max-height:90vh;overflow-y:auto}
+.modal-box img{width:100%;max-height:350px;object-fit:contain;border-radius:10px}
+.modal-box h2{color:#d6b45e}
+.modal-box p{color:white}
+.buy,.close{display:block;width:100%;padding:13px;border-radius:8px;margin-top:12px;text-decoration:none;border:0;font-size:16px;cursor:pointer}
+.buy{background:#c6a451;color:#111;font-weight:bold}
+.close{background:#333;color:white}
+footer{text-align:center;padding:20px;color:#a88d4d;font-size:13px}
+@media(max-width:380px){
+.grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.product img,.placeholder{height:165px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>LOLE FASHION BRANDS</h1>
+<p>Jackets Collection</p>
+</header>
+
+<a class="back" href="new-women.html">← رجوع للأقسام</a>
+
+<div class="container">
+<h2 class="heading">تشكيلة الجاكيت الحريمي</h2>
+<div class="grid" id="products"></div>
+</div>
+
+<div class="modal" id="modal">
+<div class="modal-box">
+<img id="modalImage" src="" alt="صورة المنتج">
+<h2>تفاصيل المنتج</h2>
+<p id="modalCode"></p>
+<p id="modalPrice"></p>
+<a class="buy" id="buyButton" href="#">اذهب للشراء</a>
+<button class="close" onclick="closeProduct()">إغلاق</button>
+</div>
+</div>
+
+<footer>LOLE FASHION BRANDS © 2026</footer>
+
+<script>
+
+// =====================================
+// المنتجات
+// عدل الكود والسعر واسم الصورة من هنا
+// =====================================
+
+const products = [
+
+{code:"١",price:1300,image:"١.jpg"},
+{code:"٢",price:1700,image:"٢.jpg"},
+{code:"٣",price:700,image:"٣.jpg"},
+{code:"٤",price:1200,image:"٤.jpg"},
+{code:"٥",price:1200,image:"٥.jpg"},
+{code:"٦",price:1400,image:"٦.jpg"},
+{code:"٧",price:1100,image:"٧.jpg"},
+{code:"٨",price:1450,image:"٨.jpg"},
+{code:"٩",price:1300,image:"٩.jpg"},
+{code:"١٠",price:1200,image:"١٠.jpg"},
+{code:"١١",price:850,image:"١١.jpg"},
+{code:"١٢",price:0,image:"١٢.jpg"},
+{code:"١٣",price:0,image:"١٣.jpg"},
+{code:"١٤",price:0,image:"١٤.jpg"},
+{code:"١٥",price:0,image:"١٥.jpg"},
+{code:"١٦",price:0,image:"١٦.jpg"},
+{code:"١٧",price:0,image:"١٧.jpg"},
+{code:"١٨",price:0,image:"١٨.jpg"},
+{code:"١٩",price:0,image:"١٩.jpg"},
+{code:"٢٠",price:0,image:"٢٠.jpg"},
+{code:"٢١",price:0,image:"٢١.jpg"},
+{code:"٢٢",price:0,image:"٢٢.jpg"},
+{code:"٢٣",price:0,image:"٢٣.jpg"},
+{code:"٢٤",price:0,image:"٢٤.jpg"},
+{code:"٢٥",price:0,image:"٢٥.jpg"},
+{code:"٢٦",price:0,image:"٢٦.jpg"},
+{code:"٢٧",price:0,image:"٢٧.jpg"},
+{code:"٢٨",price:0,image:"٢٨.jpg"},
+{code:"٢٩",price:0,image:"٢٩.jpg"},
+{code:"٣٠",price:0,image:"٣٠.jpg"},
+{code:"٣١",price:0,image:"٣١.jpg"},
+{code:"٣٢",price:0,image:"٣٢.jpg"},
+{code:"٣٣",price:0,image:"٣٣.jpg"},
+{code:"٣٤",price:0,image:"٣٤.jpg"},
+{code:"٣٥",price:0,image:"٣٥.jpg"},
+{code:"٣٦",price:0,image:"٣٦.jpg"},
+{code:"٣٧",price:0,image:"٣٧.jpg"},
+{code:"٣٨",price:0,image:"٣٨.jpg"},
+{code:"٣٩",price:0,image:"٣٩.jpg"},
+{code:"٤٠",price:0,image:"٤٠.jpg"},
+{code:"٤١",price:0,image:"٤١.jpg"},
+{code:"٤٢",price:0,image:"٤٢.jpg"},
+{code:"٤٣",price:0,image:"٤٣.jpg"},
+{code:"٤٤",price:0,image:"٤٤.jpg"},
+{code:"٤٥",price:0,image:"٤٥.jpg"},
+{code:"٤٦",price:0,image:"٤٦.jpg"},
+{code:"٤٧",price:0,image:"٤٧.jpg"},
+{code:"٤٨",price:0,image:"٤٨.jpg"},
+{code:"٤٩",price:0,image:"٤٩.jpg"},
+{code:"٥٠",price:0,image:"٥٠.jpg"}
+
+];
+
+// =====================================
+// عرض المنتجات
+// =====================================
+
+const container=document.getElementById("products");
+
+products.forEach((product,index)=>{
+
+const card=document.createElement("div");
+card.className="product";
+
+const placeholder=document.createElement("div");
+placeholder.className="placeholder";
+placeholder.textContent="فارغ";
+
+const img=document.createElement("img");
+img.src=product.image;
+img.alt="جاكيت حريمي";
+img.onerror=()=>img.replaceWith(placeholder);
+
+const info=document.createElement("div");
+info.className="info";
+
+info.innerHTML=`
+<div class="code">${product.code}</div>
+<div class="price">${toArabicNumbers(product.price)} جنيه</div>
+`;
+
+card.appendChild(img);
+card.appendChild(info);
+
+card.addEventListener("click",()=>openProduct(index));
+container.appendChild(card);
+
+});
+
+// =====================================
+// تحويل الأرقام إلى عربية
+// =====================================
+
+function toArabicNumbers(number){
+return String(number).replace(/\d/g,digit=>"٠١٢٣٤٥٦٧٨٩"[digit]);
+}
+
+// =====================================
+// تفاصيل المنتج والشراء
+// =====================================
+
+function openProduct(index){
+
+const product=products[index];
+
+document.getElementById("modalImage").src=product.image;
+document.getElementById("modalCode").textContent="كود المنتج: "+product.code;
+document.getElementById("modalPrice").textContent="السعر: "+toArabicNumbers(product.price)+" جنيه";
+
+const imageURL=new URL(product.image,location.href).href;
+
+document.getElementById("buyButton").href=
+"terms.html?code="+encodeURIComponent(product.code)+
+"&price="+encodeURIComponent(product.price)+
+"&image="+encodeURIComponent(imageURL);
+
+document.getElementById("modal").style.display="flex";
+}
+
+// =====================================
+// إغلاق النافذة
+// =====================================
+
+function closeProduct(){
+document.getElementById("modal").style.display="none";
+}
+
+document.getElementById("modal").addEventListener("click",function(e){
+if(e.target===this)closeProduct();
+});
+
+</script>
+
+</body>
+</html>

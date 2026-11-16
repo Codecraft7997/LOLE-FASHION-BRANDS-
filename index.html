@@ -1,0 +1,681 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+
+<title>LOLE | Fashion Brands</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --black:#080808;
+    --dark:#15120e;
+    --card:#201a11;
+    --gold:#d9b66b;
+    --gold-light:#e5c47d;
+    --text:#f5f1e9;
+    --muted:#999;
+    --border:#493a26;
+}
+
+body{
+    font-family:'Cairo',sans-serif;
+    background:var(--black);
+    color:var(--text);
+    overflow-x:hidden;
+}
+
+button{
+    font-family:inherit;
+    cursor:pointer;
+}
+
+/* LOGO */
+
+.logo-circle{
+    border-radius:50%;
+    overflow:hidden;
+    background:#111;
+    border:1px solid #55432b;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-shrink:0;
+}
+
+.logo-circle img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.welcome-logo{
+    width:155px;
+    height:155px;
+    margin:0 auto 22px;
+    border:2px solid var(--gold);
+    box-shadow:0 8px 30px #0008;
+}
+
+.header-logo{
+    width:60px;
+    height:60px;
+}
+
+/* WELCOME */
+
+.welcome{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    background:radial-gradient(ellipse at center,#241e14,#080808 75%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:25px;
+    transition:.7s;
+}
+
+.welcome.hide{
+    opacity:0;
+    visibility:hidden;
+    transform:scale(1.03);
+}
+
+.welcome-content{
+    max-width:450px;
+    width:100%;
+    animation:appear 1s ease;
+}
+
+.welcome-title{
+    font-family:'Playfair Display',serif;
+    font-size:45px;
+    letter-spacing:9px;
+    color:var(--gold-light);
+    direction:ltr;
+}
+
+.welcome-subtitle{
+    color:#a88a4e;
+    font-family:'Playfair Display',serif;
+    font-size:10px;
+    letter-spacing:5px;
+    margin-top:6px;
+    direction:ltr;
+}
+
+.line{
+    width:45px;
+    height:1px;
+    background:var(--gold);
+    margin:22px auto;
+}
+
+.welcome-description{
+    color:#bbb;
+    font-size:13px;
+    margin-bottom:25px;
+}
+
+.enter-btn{
+    background:linear-gradient(120deg,#a77c35,#f1d69b);
+    color:#111;
+    border:0;
+    padding:13px 42px;
+    font-size:13px;
+    font-weight:900;
+    border-radius:7px;
+    transition:.3s;
+}
+
+.enter-btn:hover{
+    filter:brightness(1.12);
+}
+
+/* HEADER */
+
+header{
+    background:#0d0d0d;
+    padding:13px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+    position:relative;
+    z-index:5;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-name{
+    font-family:'Playfair Display',serif;
+    font-size:23px;
+    letter-spacing:4px;
+    color:var(--gold);
+    direction:ltr;
+}
+
+.brand-sub{
+    font-family:'Playfair Display',serif;
+    font-size:9px;
+    color:#999;
+    letter-spacing:3px;
+    margin-top:3px;
+    direction:ltr;
+}
+
+.header-note{
+    color:#aaa;
+    font-size:11px;
+}
+
+/* HERO */
+
+.hero{
+    min-height:340px;
+    background:linear-gradient(145deg,#211a10,#080808);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:55px 20px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid var(--border);
+}
+
+.hero::before,
+.hero::after{
+    content:"";
+    position:absolute;
+    border:1px solid #d9b66b18;
+    border-radius:50%;
+    width:320px;
+    height:320px;
+}
+
+.hero::after{
+    width:270px;
+    height:270px;
+}
+
+.hero-content{
+    position:relative;
+    z-index:1;
+}
+
+.hero-label{
+    font-family:'Playfair Display',serif;
+    color:#b99b60;
+    font-size:11px;
+    letter-spacing:6px;
+    direction:ltr;
+}
+
+.hero h1{
+    font-family:'Playfair Display',serif;
+    font-size:75px;
+    letter-spacing:13px;
+    font-weight:500;
+    color:var(--gold-light);
+    margin:12px 0;
+    direction:ltr;
+}
+
+.hero-line{
+    width:45px;
+    height:2px;
+    background:var(--gold);
+    margin:auto;
+}
+
+/* COLLECTIONS */
+
+.container{
+    max-width:1050px;
+    margin:auto;
+    padding:55px 22px 65px;
+}
+
+.section-heading{
+    text-align:center;
+    margin-bottom:32px;
+}
+
+.section-heading span{
+    font-family:'Playfair Display',serif;
+    font-size:10px;
+    letter-spacing:5px;
+    color:#a88a4e;
+    direction:ltr;
+}
+
+.section-heading h2{
+    font-size:26px;
+    color:var(--gold-light);
+    margin-top:8px;
+    font-weight:800;
+}
+
+/* CATEGORY CARDS */
+
+.categories{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:22px;
+}
+
+.category{
+    background:linear-gradient(145deg,#201a11,#100e0b);
+    border:1px solid #55432b;
+    border-radius:15px;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.category:hover{
+    transform:translateY(-5px);
+    border-color:var(--gold);
+    box-shadow:0 10px 30px #d9b66b15;
+}
+
+.category-image{
+    width:100%;
+    height:320px;
+    overflow:hidden;
+    background:#15120e;
+}
+
+.category-image img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+    transition:.5s;
+}
+
+.category:hover .category-image img{
+    transform:scale(1.04);
+}
+
+.category-content{
+    padding:20px;
+    text-align:center;
+}
+
+.category-number{
+    font-family:'Playfair Display',serif;
+    font-size:10px;
+    color:#a88a4e;
+    letter-spacing:3px;
+    direction:ltr;
+}
+
+.category h3{
+    color:var(--gold-light);
+    font-size:25px;
+    margin:5px 0 15px;
+}
+
+.category a{
+    display:block;
+    text-decoration:none;
+    color:#111;
+    background:linear-gradient(120deg,#a77c35,#f1d69b);
+    padding:12px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:900;
+    transition:.3s;
+}
+
+.category a:hover{
+    filter:brightness(1.12);
+}
+
+/* BRAND MESSAGE */
+
+.brand-message{
+    background:#100e0b;
+    text-align:center;
+    padding:35px 15px;
+    border-top:1px solid #292218;
+    border-bottom:1px solid #292218;
+}
+
+.brand-message h2{
+    font-family:'Playfair Display',serif;
+    font-size:21px;
+    letter-spacing:4px;
+    color:var(--gold);
+    direction:ltr;
+}
+
+/* FOOTER */
+
+footer{
+    background:#080808;
+    text-align:center;
+    padding:30px 15px;
+}
+
+.footer-name{
+    font-family:'Playfair Display',serif;
+    font-size:25px;
+    letter-spacing:5px;
+    color:var(--gold);
+    direction:ltr;
+}
+
+.footer-sub{
+    font-family:'Playfair Display',serif;
+    font-size:9px;
+    letter-spacing:4px;
+    color:#a88a4e;
+    margin-top:4px;
+    direction:ltr;
+}
+
+.footer-line{
+    width:40px;
+    height:1px;
+    background:#55432b;
+    margin:17px auto;
+}
+
+footer p{
+    color:#777;
+    font-size:11px;
+}
+
+/* ANIMATION */
+
+@keyframes appear{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:650px){
+
+    header{
+        padding:12px 14px;
+    }
+
+    .header-logo{
+        width:52px;
+        height:52px;
+    }
+
+    .brand{
+        gap:9px;
+    }
+
+    .brand-name{
+        font-size:20px;
+    }
+
+    .brand-sub{
+        font-size:8px;
+        letter-spacing:2px;
+    }
+
+    .header-note{
+        font-size:9px;
+    }
+
+    .hero{
+        min-height:280px;
+    }
+
+    .hero h1{
+        font-size:58px;
+        letter-spacing:9px;
+    }
+
+    .container{
+        padding:45px 15px 55px;
+    }
+
+    .section-heading h2{
+        font-size:23px;
+    }
+
+    .categories{
+        grid-template-columns:1fr;
+        gap:17px;
+    }
+
+    .category-image{
+        height:290px;
+    }
+
+    .category-content{
+        padding:16px;
+    }
+
+    .category h3{
+        font-size:22px;
+    }
+
+    .welcome-title{
+        font-size:36px;
+    }
+
+    .welcome-logo{
+        width:135px;
+        height:135px;
+    }
+
+    .brand-message h2{
+        font-size:17px;
+        letter-spacing:2px;
+    }
+}
+
+@media(min-width:651px) and (max-width:900px){
+    .category-image{
+        height:260px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- WELCOME -->
+
+<div class="welcome" id="welcome">
+
+    <div class="welcome-content">
+
+        <div class="logo-circle welcome-logo">
+            <img src="ppp.jpg" alt="LOLE Logo">
+        </div>
+
+        <h1 class="welcome-title">LOLE</h1>
+
+        <div class="welcome-subtitle">
+            FASHION BRANDS
+        </div>
+
+        <div class="line"></div>
+
+        <p class="welcome-description">
+            اكتشفي مجموعتنا الجديدة
+        </p>
+
+        <button class="enter-btn" onclick="enterStore()">
+            دخول المتجر
+        </button>
+
+    </div>
+
+</div>
+
+<!-- HEADER -->
+
+<header>
+
+    <div class="brand">
+
+        <div class="logo-circle header-logo">
+            <img src="ooo.jpg" alt="LOLE Logo">
+        </div>
+
+        <div>
+            <div class="brand-name">LOLE</div>
+            <div class="brand-sub">FASHION BRANDS</div>
+        </div>
+
+    </div>
+
+    <div class="header-note">
+        FASHION BRANDS
+    </div>
+
+</header>
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-label">
+            LOLE FASHION BRANDS
+        </div>
+
+        <h1>LOLE</h1>
+
+        <div class="hero-line"></div>
+
+    </div>
+
+</section>
+
+<!-- COLLECTIONS -->
+
+<main class="container">
+
+    <div class="section-heading">
+        <span>DISCOVER OUR COLLECTIONS</span>
+        <h2>المجموعات</h2>
+    </div>
+
+    <div class="categories">
+
+        <!-- NEW -->
+
+        <div class="category">
+
+            <div class="category-image">
+                <img
+                    src="iii.jpg"
+                    alt="New Fashion Collection"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="category-content">
+
+                <div class="category-number">
+                    COLLECTION 01
+                </div>
+
+                <h3>الجديد</h3>
+
+                <a href="new.html">
+                    تصفحي المجموعة ←
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- STOCK -->
+
+        <div class="category">
+
+            <div class="category-image">
+                <img
+                    src="sss.jpg"
+                    alt="Fashion Stock Collection"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="category-content">
+
+                <div class="category-number">
+                    COLLECTION 02
+                </div>
+
+                <h3>الستوك</h3>
+
+                <a href="stock.html">
+                    تصفحي المجموعة ←
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<!-- BRAND MESSAGE -->
+
+<section class="brand-message">
+    <h2>LOLE FASHION BRANDS</h2>
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-name">LOLE</div>
+
+    <div class="footer-sub">
+        FASHION BRANDS
+    </div>
+
+    <div class="footer-line"></div>
+
+    <p>جميع الحقوق محفوظة © 2026</p>
+
+</footer>
+
+<script>
+function enterStore(){
+    document.getElementById("welcome").classList.add("hide");
+}
+</script>
+
+</body>
+</html>
